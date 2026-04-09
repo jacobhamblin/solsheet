@@ -821,19 +821,19 @@ input[type="checkbox"]:checked {
   <div class="card">
     <div class="fields-row cols-2">
       <div class="field">
-        <input type="text" name="classlevel" placeholder="Kineticist 1">
+        <input type="text" name="classlevel" placeholder="">
         <label>Class &amp; Level</label>
       </div>
       <div class="field">
-        <input type="text" name="specialization" placeholder="Elemental Channeler">
+        <input type="text" name="specialization">
         <label>Specialization</label>
       </div>
       <div class="field">
-        <input type="text" name="origin" placeholder="Belter">
+        <input type="text" name="origin" placeholder="Belter / Martian / Terran">
         <label>Origin</label>
       </div>
       <div class="field">
-        <input type="text" name="background" placeholder="Research Analyst">
+        <input type="text" name="background" placeholder="Background">
         <label>Background</label>
       </div>
       <div class="field">
@@ -961,7 +961,7 @@ input[type="checkbox"]:checked {
 
   <div class="profs-textarea">
     <label>Other Proficiencies &amp; Languages</label>
-    <textarea name="otherprofs" placeholder="Tool proficiencies, languages, special training...&#10;e.g. Lab Kit, Hacking Suite, Basic, Lang Belta"></textarea>
+    <textarea name="otherprofs" placeholder="Tool proficiencies, languages, special training..."></textarea>
   </div>
 
 </div>
@@ -991,7 +991,7 @@ input[type="checkbox"]:checked {
   <div class="hp-card">
     <div class="hp-max-bar">
       <label>Hit Point Maximum</label>
-      <input type="text" name="maxhp" placeholder="6">
+      <input type="text" name="maxhp" placeholder="—">
     </div>
     <div class="hp-main">
       <div class="hp-cell">
@@ -1057,7 +1057,7 @@ input[type="checkbox"]:checked {
       <label>Blast Damage</label>
     </div>
     <div class="k-stat">
-      <input type="text" name="elementalaffinity" placeholder="Water">
+      <input type="text" name="elementalaffinity" placeholder="—">
       <label>Element</label>
     </div>
   </div>
@@ -1095,15 +1095,15 @@ input[type="checkbox"]:checked {
         </tr>
       </thead>
       <tbody>
-        <tr><td><input type="text" name="atk1" placeholder="Kinetic Blast"></td><td><input type="text" name="atkb1" placeholder="+WIS"></td><td><input type="text" name="atkd1" placeholder="1d10 force"></td></tr>
-        <tr><td><input type="text" name="atk2" placeholder="Elemental Conduit"></td><td><input type="text" name="atkb2" placeholder="—"></td><td><input type="text" name="atkd2" placeholder="+1d6 water"></td></tr>
+        <tr><td><input type="text" name="atk1"></td><td><input type="text" name="atkb1"></td><td><input type="text" name="atkd1"></td></tr>
+        <tr><td><input type="text" name="atk2"></td><td><input type="text" name="atkb2"></td><td><input type="text" name="atkd2"></td></tr>
         <tr><td><input type="text" name="atk3"></td><td><input type="text" name="atkb3"></td><td><input type="text" name="atkd3"></td></tr>
         <tr><td><input type="text" name="atk4"></td><td><input type="text" name="atkb4"></td><td><input type="text" name="atkd4"></td></tr>
         <tr><td><input type="text" name="atk5"></td><td><input type="text" name="atkb5"></td><td><input type="text" name="atkd5"></td></tr>
       </tbody>
     </table>
     <div class="atk-notes">
-      <textarea name="atknotes" placeholder="Collision: 1d10 per 5ft blocked. Knockback: STR save vs DC. Elemental sources: standing liquid, coolant, ice patch, dense mist..."></textarea>
+      <textarea name="atknotes"></textarea>
     </div>
     <div class="card-title">Attacks &amp; Abilities</div>
   </div>
@@ -1127,7 +1127,7 @@ input[type="checkbox"]:checked {
   <div class="sec-heading">Gear &amp; Inventory</div>
   <div class="card">
     <div class="equip-textarea">
-      <textarea name="equipment" placeholder="Sidearm&#10;Light armor&#10;Elemental gauntlets&#10;1x Utility gear item&#10;&#10;Personal effects..."></textarea>
+      <textarea name="equipment"></textarea>
     </div>
     <div class="card-title">Equipment</div>
   </div>
@@ -1142,7 +1142,7 @@ input[type="checkbox"]:checked {
   <div class="sec-heading">Personality</div>
   <div class="flavor-card">
     <div class="flavor-item">
-      <textarea name="personality" placeholder="How do you carry yourself? What habits came from Titan?"></textarea>
+      <textarea name="personality" placeholder="How do you carry yourself? What habits define you?"></textarea>
       <label>Personality Traits</label>
     </div>
     <div class="flavor-item">
@@ -1154,7 +1154,7 @@ input[type="checkbox"]:checked {
       <label>Bonds</label>
     </div>
     <div class="flavor-item">
-      <textarea name="flaws" placeholder="What weakness do you carry? What from the eruption still haunts you?"></textarea>
+      <textarea name="flaws" placeholder="What weakness do you carry? What still haunts you?"></textarea>
       <label>Flaws</label>
     </div>
   </div>
@@ -1162,13 +1162,13 @@ input[type="checkbox"]:checked {
   <div class="sec-heading">Features &amp; Traits</div>
   <div class="big-textarea">
     <label>Features &amp; Class Traits</label>
-    <textarea name="features" placeholder="Kinetic Blast — 1d10 force, 60ft, +WIS to hit&#10;Kinetic Shielding — bonus action, WIS+Prof temp HP&#10;Psionic Control — bonus action, move 10lb object&#10;Elemental Affinity: Water — +1d6 near valid source&#10;&#10;Low-G Adaptation (Belter)&#10;Vacuum-Born Reflexes (Belter)&#10;Station-Bred Ingenuity (Belter)&#10;&#10;Technical Clearance (Research Analyst)"></textarea>
+    <textarea name="features"></textarea>
   </div>
 
   <div class="sec-heading">Origin &amp; Background</div>
   <div class="big-textarea">
     <label>Origin &amp; Background Notes</label>
-    <textarea name="originnotes" placeholder="Vanta Research outpost, Titan equatorial region near Sotra Patera. Belter-raised in sealed compound. Survived Doom Mons cryovolcanic event. Neural resonance triggered by ammonia-tholin atmospheric saturation. Elemental affinity: ice / water."></textarea>
+    <textarea name="originnotes"></textarea>
   </div>
 
 </div>
