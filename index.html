@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Sol Experience — Character Sheet</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:wght@300;400;500;600;700&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0e0f11;
+  --bg2: #161719;
+  --bg3: #1e2024;
+  --bg4: #26282d;
+  --border: #2e3138;
+  --border-bright: #3e424d;
+  --accent: #4fc3c3;
+  --accent-dim: #2a7878;
+  --accent-faint: #162828;
+  --text: #c8cdd8;
+  --text-dim: #6b7280;
+  --text-faint: #3d4350;
+  --danger: #e05c5c;
+  --warning: #d4944a;
+  --mono: 'Share Tech Mono', monospace;
+  --cond: 'Barlow Condensed', sans-serif;
+  --body: 'Barlow', sans-serif;
+  --radius: 4px;
+  --radius-lg: 8px;
+  --gap: 10px;
+  --nav-h: 52px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  background: #080909;
+  color: var(--text);
+  font-family: var(--body);
+  font-size: 14px;
+  min-height: 100vh;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.025) 2px, rgba(0,0,0,0.025) 4px);
+  pointer-events: none;
+  z-index: 999;
+}
+
+/* ── NAV BAR ── */
+.top-bar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  height: var(--nav-h);
+  gap: 10px;
+}
+.top-bar .game-tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--accent);
+  letter-spacing: 0.12em;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.top-bar .pulse {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 7px var(--accent);
+  flex-shrink: 0;
+  animation: pulse 2.5s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.25} }
+.top-bar .charname-display {
+  flex: 1;
+  font-family: var(--cond);
+  font-size: 18px;
+  font-weight: 600;
+  color: #e0e4f0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── SECTION TABS ── */
+.tab-nav {
+  position: sticky;
+  top: var(--nav-h);
+  z-index: 90;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.tab-nav::-webkit-scrollbar { display: none; }
+.tab-btn {
+  flex-shrink: 0;
+  padding: 10px 14px;
+  font-family: var(--cond);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
+  white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+}
+.tab-btn.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+/* ── SECTIONS ── */
+.section-page {
+  display: none;
+  padding: 14px 12px 40px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+.section-page.active { display: block; }
+
+/* ── UTILITY ── */
+label {
+  font-family: var(--cond);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  display: block;
+}
+
+input[type="text"], textarea {
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-family: var(--cond);
+  font-size: 15px;
+  font-weight: 400;
+  width: 100%;
+  outline: none;
+  -webkit-appearance: none;
+}
+input[type="text"]:focus, textarea:focus { color: #fff; }
+input::placeholder, textarea::placeholder { color: var(--text-faint); }
+textarea { resize: none; font-size: 13px; line-height: 1.55; }
+
+input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 14px; height: 14px;
+  border: 1px solid var(--border-bright);
+  border-radius: 50%;
+  cursor: pointer;
+  flex-shrink: 0;
+  background: var(--bg3);
+}
+input[type="checkbox"]:checked {
+  background: var(--accent);
+  border-color: var(--accent);
+  box-shadow: 0 0 5px var(--accent-dim);
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--gap);
+}
+.card-title {
+  font-family: var(--cond);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent-dim);
+  text-align: center;
+  padding: 6px 0 5px;
+  border-top: 1px solid var(--border);
+}
+
+.field {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 3px;
+}
+.field input { border-bottom: 1px solid var(--border); padding-bottom: 3px; }
+.field input:focus { border-bottom-color: var(--accent-dim); }
+
+/* row of fields */
+.fields-row {
+  display: grid;
+  gap: var(--gap);
+  padding: 12px;
+}
+.fields-row.cols-2 { grid-template-columns: 1fr 1fr; }
+.fields-row.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+/* section heading */
+.sec-heading {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--accent-dim);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin: 16px 0 6px;
+  padding-left: 2px;
+  border-left: 2px solid var(--accent-dim);
+  padding-left: 7px;
+}
+.sec-heading:first-child { margin-top: 0; }
+
+/* ── IDENTITY SECTION ── */
+.charname-big {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 14px 14px 10px;
+  margin-bottom: var(--gap);
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 4px;
+}
+.charname-big input {
+  font-family: var(--cond);
+  font-size: 30px;
+  font-weight: 600;
+  color: #e8eaf0;
+  border-bottom: 1px solid var(--accent-dim);
+  padding-bottom: 3px;
+}
+.charname-big label { font-size: 9px; color: var(--accent-dim); }
+
+/* ── ATTRIBUTES SECTION ── */
+.attr-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  padding: 10px;
+}
+.attr-item {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  text-align: center;
+  padding: 8px 4px 6px;
+}
+.attr-item label {
+  font-size: 8px;
+  color: var(--accent-dim);
+  margin-bottom: 2px;
+  letter-spacing: 0.12em;
+}
+.attr-item .score {
+  font-family: var(--cond);
+  font-size: 38px;
+  font-weight: 300;
+  color: #e0e4f0;
+  text-align: center;
+  width: 100%;
+  line-height: 1;
+  border: none;
+  background: transparent;
+  outline: none;
+}
+.attr-item .mod {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--accent);
+  text-align: center;
+  width: 44px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 2px 0;
+  margin: 4px auto 0;
+  display: block;
+  outline: none;
+}
+
+/* Inline stat row (inspiration, prof bonus, passive perc) */
+.inline-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  padding: 10px;
+}
+.inline-stat {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 7px 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.inline-stat label { flex: 1; font-size: 8px; }
+.inline-stat input[type="text"] {
+  width: 32px;
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--accent);
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Saves + Skills list */
+.list-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--gap);
+  padding: 8px;
+}
+.list-card ul { list-style: none; }
+.list-card ul li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 2px;
+  border-bottom: 1px solid var(--border);
+}
+.list-card ul li:last-child { border-bottom: none; }
+.list-card ul li label {
+  flex: 1;
+  text-transform: none;
+  font-size: 13px;
+  font-family: var(--body);
+  font-weight: 400;
+  color: var(--text);
+  letter-spacing: 0;
+}
+.list-card ul li .attr-tag {
+  font-size: 9px;
+  color: var(--text-dim);
+  font-family: var(--mono);
+}
+.list-card ul li input[type="text"] {
+  width: 34px;
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--text);
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+
+/* ── COMBAT SECTION ── */
+.big-stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: var(--gap);
+}
+.big-stat {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  padding: 8px 4px 10px;
+  text-align: center;
+}
+.big-stat label { font-size: 8px; color: var(--accent-dim); margin-top: 4px; }
+.big-stat input {
+  font-family: var(--cond);
+  font-size: 40px;
+  font-weight: 300;
+  color: #e0e4f0;
+  text-align: center;
+  width: 100%;
+  border: none;
+  background: transparent;
+  outline: none;
+}
+
+.hp-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-bottom: var(--gap);
+}
+.hp-max-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 12px;
+  background: var(--bg3);
+  border-bottom: 1px solid var(--border);
+}
+.hp-max-bar label { font-size: 8px; }
+.hp-max-bar input {
+  width: 60px;
+  font-family: var(--mono);
+  font-size: 13px;
+  text-align: right;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  outline: none;
+  background: transparent;
+  border-top: none; border-left: none; border-right: none;
+}
+.hp-main {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.hp-cell {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  padding: 8px 10px 10px;
+  text-align: center;
+}
+.hp-cell:first-child { border-right: 1px solid var(--border); }
+.hp-cell label { font-size: 8px; color: var(--accent-dim); }
+.hp-cell input {
+  font-family: var(--cond);
+  font-size: 32px;
+  font-weight: 300;
+  text-align: center;
+  color: #e0e4f0;
+  width: 100%;
+  border: none; background: transparent; outline: none;
+}
+
+.hd-saves-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: var(--gap);
+}
+.hd-block {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 10px;
+}
+.hd-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 5px;
+}
+.hd-row label { font-size: 8px; }
+.hd-row input {
+  width: 55px;
+  font-family: var(--mono);
+  font-size: 13px;
+  text-align: right;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  background: transparent; outline: none; border-top: none; border-left: none; border-right: none;
+}
+
+.death-block {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+}
+.death-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.death-row > label {
+  font-size: 10px;
+  text-transform: none;
+  width: 68px;
+  flex-shrink: 0;
+  font-family: var(--body);
+}
+.death-row > label.s { color: var(--accent); }
+.death-row > label.f { color: var(--danger); }
+.death-bubbles { display: flex; gap: 6px; }
+
+/* ── KINETIC SECTION ── */
+.kinetic-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: var(--gap);
+}
+.k-stat {
+  background: var(--bg2);
+  border: 1px solid var(--accent-faint);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  padding: 8px 6px 10px;
+  text-align: center;
+}
+.k-stat label { font-size: 8px; color: var(--accent-dim); margin-top: 3px; }
+.k-stat input {
+  font-family: var(--mono);
+  font-size: 20px;
+  color: var(--accent);
+  text-align: center;
+  width: 100%;
+  border-bottom: 1px dashed var(--accent-faint);
+  background: transparent; outline: none; border-top: none; border-left: none; border-right: none;
+}
+
+.uses-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: var(--gap);
+}
+.uses-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 10px;
+}
+.uses-card > label { margin-bottom: 8px; }
+.bubbles { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 4px; }
+.bubbles input[type="checkbox"] { width: 16px; height: 16px; }
+.uses-note {
+  font-family: var(--mono);
+  font-size: 8px;
+  color: var(--text-dim);
+  margin-top: 3px;
+}
+
+/* attacks table */
+.attacks-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-bottom: var(--gap);
+}
+.attacks-card table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+.attacks-card thead tr {
+  background: var(--bg3);
+  border-bottom: 1px solid var(--border);
+}
+.attacks-card th {
+  font-family: var(--cond);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent-dim);
+  padding: 7px 8px;
+  text-align: left;
+}
+.attacks-card tbody tr { border-bottom: 1px solid var(--border); }
+.attacks-card tbody tr:last-child { border-bottom: none; }
+.attacks-card td { padding: 3px 4px; }
+.attacks-card td input {
+  font-size: 12px;
+  padding: 4px;
+  border-radius: 2px;
+  background: transparent;
+  outline: none;
+  border: none;
+  width: 100%;
+  color: var(--text);
+  font-family: var(--cond);
+}
+.attacks-card td input:focus { background: var(--bg3); }
+.atk-notes { padding: 8px; border-top: 1px solid var(--border); }
+.atk-notes textarea { height: 60px; }
+
+/* ── EQUIPMENT ── */
+.credits-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg3);
+}
+.credits-row label { font-size: 9px; flex-shrink: 0; }
+.credits-row input {
+  width: 90px;
+  font-family: var(--mono);
+  font-size: 15px;
+  color: var(--warning);
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+  background: transparent; outline: none; border-top: none; border-left: none; border-right: none;
+}
+.equip-textarea { padding: 10px; }
+.equip-textarea textarea { height: 120px; }
+
+/* ── FLAVOR + FEATURES ── */
+.flavor-card {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: var(--gap);
+}
+.flavor-item {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  display: flex;
+  flex-direction: column-reverse;
+  padding: 6px 8px 8px;
+}
+.flavor-item label {
+  font-size: 8px;
+  color: var(--text-dim);
+  text-align: center;
+  padding-top: 5px;
+  border-top: 1px solid var(--border);
+  margin-top: 5px;
+}
+.flavor-item textarea { height: 70px; }
+
+.big-textarea {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--gap);
+  display: flex;
+  flex-direction: column-reverse;
+}
+.big-textarea > label {
+  text-align: center;
+  color: var(--accent-dim);
+  padding: 6px;
+  border-top: 1px solid var(--border);
+}
+.big-textarea textarea {
+  padding: 12px;
+  height: 180px;
+  color: var(--text);
+  line-height: 1.55;
+  background: transparent;
+}
+
+.profs-textarea {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--gap);
+  display: flex;
+  flex-direction: column-reverse;
+}
+.profs-textarea > label {
+  text-align: center;
+  color: var(--accent-dim);
+  padding: 6px;
+  border-top: 1px solid var(--border);
+}
+.profs-textarea textarea {
+  padding: 10px;
+  height: 90px;
+  background: transparent;
+  font-size: 12px;
+}
+
+/* ── SAVE BAR ── */
+.save-bar {
+  position: sticky;
+  bottom: 0;
+  z-index: 90;
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+}
+.save-btn {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: var(--accent-faint);
+  border: 1px solid var(--accent-dim);
+  border-radius: var(--radius);
+  padding: 8px 14px;
+  cursor: pointer;
+  flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.15s;
+}
+.save-btn:active { background: var(--accent-dim); }
+.save-btn.danger {
+  color: var(--danger);
+  background: rgba(224,92,92,0.08);
+  border-color: rgba(224,92,92,0.35);
+}
+.save-status {
+  flex: 1;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text-dim);
+  letter-spacing: 0.06em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.save-status.dirty { color: var(--warning); }
+.save-status.ok { color: var(--accent); }
+.save-status.err { color: var(--danger); }
+
+/* toast notification */
+.toast {
+  position: fixed;
+  bottom: 70px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--bg3);
+  border: 1px solid var(--border-bright);
+  border-radius: var(--radius-lg);
+  padding: 10px 18px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--text);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s, transform 0.2s;
+  z-index: 200;
+  white-space: nowrap;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+.toast.ok { color: var(--accent); border-color: var(--accent-dim); }
+.toast.err { color: var(--danger); border-color: var(--danger); }
+
+/* ── DESKTOP OVERRIDE ── */
+@media (min-width: 700px) {
+  .section-page { max-width: 680px; }
+
+  /* Identity: 2-col misc fields */
+  .header-misc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px 16px;
+    padding: 12px;
+  }
+
+  /* Attributes: side-by-side */
+  .attr-saves-skills-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--gap);
+  }
+
+  /* Combat: bigger layout */
+  .big-stats-row { grid-template-columns: repeat(3, 1fr); }
+
+  /* Flavor: 2 column */
+  .flavor-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- Top bar -->
+<div class="top-bar">
+  <div class="pulse"></div>
+  <span class="game-tag">SOL / BELT</span>
+  <div class="charname-display" id="nameDisplay">Character Name</div>
+</div>
+
+<!-- Tab navigation -->
+<nav class="tab-nav">
+  <button class="tab-btn active" data-tab="identity">Identity</button>
+  <button class="tab-btn" data-tab="attributes">Attributes</button>
+  <button class="tab-btn" data-tab="combat">Combat</button>
+  <button class="tab-btn" data-tab="kinetic">Kinetic</button>
+  <button class="tab-btn" data-tab="equipment">Equipment</button>
+  <button class="tab-btn" data-tab="character">Character</button>
+</nav>
+
+<!-- ══════════════════════════════════════════
+     IDENTITY
+══════════════════════════════════════════ -->
+<div class="section-page active" id="tab-identity">
+
+  <div class="charname-big">
+    <input type="text" name="charname" id="charnameInput" placeholder="Operative Designation">
+    <label>Character Name</label>
+  </div>
+
+  <div class="sec-heading">Classification</div>
+  <div class="card">
+    <div class="fields-row cols-2">
+      <div class="field">
+        <input type="text" name="classlevel" placeholder="Kineticist 1">
+        <label>Class &amp; Level</label>
+      </div>
+      <div class="field">
+        <input type="text" name="specialization" placeholder="Elemental Channeler">
+        <label>Specialization</label>
+      </div>
+      <div class="field">
+        <input type="text" name="origin" placeholder="Belter">
+        <label>Origin</label>
+      </div>
+      <div class="field">
+        <input type="text" name="background" placeholder="Research Analyst">
+        <label>Background</label>
+      </div>
+      <div class="field">
+        <input type="text" name="faction" placeholder="Unaffiliated">
+        <label>Faction Affiliation</label>
+      </div>
+      <div class="field">
+        <input type="text" name="playername" placeholder="Player Name">
+        <label>Player</label>
+      </div>
+    </div>
+    <div class="card-title">Operative Classification</div>
+  </div>
+
+  <div class="sec-heading">XP &amp; Advancement</div>
+  <div class="card">
+    <div class="fields-row cols-2">
+      <div class="field">
+        <input type="text" name="xp" placeholder="0">
+        <label>Experience Points</label>
+      </div>
+      <div class="field">
+        <input type="text" name="nextlevel" placeholder="300">
+        <label>Next Level At</label>
+      </div>
+    </div>
+    <div class="card-title">Experience</div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════
+     ATTRIBUTES
+══════════════════════════════════════════ -->
+<div class="section-page" id="tab-attributes">
+
+  <div class="sec-heading">Attribute Scores</div>
+  <div class="card">
+    <div class="attr-grid">
+      <div class="attr-item">
+        <label>Strength</label>
+        <input class="score" type="text" name="strval" placeholder="10">
+        <input class="mod" type="text" name="strmod" placeholder="+0">
+      </div>
+      <div class="attr-item">
+        <label>Dexterity</label>
+        <input class="score" type="text" name="dexval" placeholder="10">
+        <input class="mod" type="text" name="dexmod" placeholder="+0">
+      </div>
+      <div class="attr-item">
+        <label>Constitution</label>
+        <input class="score" type="text" name="conval" placeholder="10">
+        <input class="mod" type="text" name="conmod" placeholder="+0">
+      </div>
+      <div class="attr-item">
+        <label>Wisdom</label>
+        <input class="score" type="text" name="wisval" placeholder="10">
+        <input class="mod" type="text" name="wismod" placeholder="+0">
+      </div>
+      <div class="attr-item">
+        <label>Intelligence</label>
+        <input class="score" type="text" name="intval" placeholder="10">
+        <input class="mod" type="text" name="intmod" placeholder="+0">
+      </div>
+      <div class="attr-item">
+        <label>Charisma</label>
+        <input class="score" type="text" name="chaval" placeholder="10">
+        <input class="mod" type="text" name="chamod" placeholder="+0">
+      </div>
+    </div>
+    <div class="card-title">Attributes</div>
+  </div>
+
+  <div class="sec-heading">Core Values</div>
+  <div class="card">
+    <div class="inline-stats">
+      <div class="inline-stat">
+        <label>Inspiration</label>
+        <input type="checkbox" name="inspiration">
+      </div>
+      <div class="inline-stat">
+        <label>Prof Bonus</label>
+        <input type="text" name="profbonus" placeholder="+2">
+      </div>
+      <div class="inline-stat">
+        <label>Passive Perc</label>
+        <input type="text" name="passiveperc" placeholder="10">
+      </div>
+    </div>
+    <div class="card-title">Bonuses</div>
+  </div>
+
+  <div class="sec-heading">Saving Throws</div>
+  <div class="list-card">
+    <ul>
+      <li><input type="checkbox" name="str-save-prof"><input type="text" name="str-save" placeholder="+0"><label>Strength</label></li>
+      <li><input type="checkbox" name="dex-save-prof"><input type="text" name="dex-save" placeholder="+0"><label>Dexterity</label></li>
+      <li><input type="checkbox" name="con-save-prof"><input type="text" name="con-save" placeholder="+0"><label>Constitution</label></li>
+      <li><input type="checkbox" name="wis-save-prof"><input type="text" name="wis-save" placeholder="+0"><label>Wisdom <span style="color:var(--accent);font-size:9px;">★</span></label></li>
+      <li><input type="checkbox" name="int-save-prof"><input type="text" name="int-save" placeholder="+0"><label>Intelligence <span style="color:var(--accent);font-size:9px;">★</span></label></li>
+      <li><input type="checkbox" name="cha-save-prof"><input type="text" name="cha-save" placeholder="+0"><label>Charisma</label></li>
+    </ul>
+    <div class="card-title">Saving Throws — ★ Kineticist Primary</div>
+  </div>
+
+  <div class="sec-heading">Skills</div>
+  <div class="list-card">
+    <ul>
+      <li><input type="checkbox" name="athletics-prof"><input type="text" name="athletics" placeholder="+0"><label>Athletics <span class="attr-tag">STR</span></label></li>
+      <li><input type="checkbox" name="deception-prof"><input type="text" name="deception" placeholder="+0"><label>Deception <span class="attr-tag">CHA</span></label></li>
+      <li><input type="checkbox" name="engineering-prof"><input type="text" name="engineering" placeholder="+0"><label>Engineering <span class="attr-tag">INT</span></label></li>
+      <li><input type="checkbox" name="hacking-prof"><input type="text" name="hacking" placeholder="+0"><label>Hacking <span class="attr-tag">INT</span></label></li>
+      <li><input type="checkbox" name="insight-prof"><input type="text" name="insight" placeholder="+0"><label>Insight <span class="attr-tag">WIS</span></label></li>
+      <li><input type="checkbox" name="intimidation-prof"><input type="text" name="intimidation" placeholder="+0"><label>Intimidation <span class="attr-tag">CHA</span></label></li>
+      <li><input type="checkbox" name="investigation-prof"><input type="text" name="investigation" placeholder="+0"><label>Investigation <span class="attr-tag">INT</span></label></li>
+      <li><input type="checkbox" name="medicine-prof"><input type="text" name="medicine" placeholder="+0"><label>Medicine <span class="attr-tag">WIS</span></label></li>
+      <li><input type="checkbox" name="perception-prof"><input type="text" name="perception" placeholder="+0"><label>Perception <span class="attr-tag">WIS</span></label></li>
+      <li><input type="checkbox" name="persuasion-prof"><input type="text" name="persuasion" placeholder="+0"><label>Persuasion <span class="attr-tag">CHA</span></label></li>
+      <li><input type="checkbox" name="piloting-prof"><input type="text" name="piloting" placeholder="+0"><label>Piloting <span class="attr-tag">DEX</span></label></li>
+      <li><input type="checkbox" name="stealth-prof"><input type="text" name="stealth" placeholder="+0"><label>Stealth <span class="attr-tag">DEX</span></label></li>
+      <li><input type="checkbox" name="survival-prof"><input type="text" name="survival" placeholder="+0"><label>Survival <span class="attr-tag">WIS</span></label></li>
+    </ul>
+    <div class="card-title">Skills</div>
+  </div>
+
+  <div class="profs-textarea">
+    <label>Other Proficiencies &amp; Languages</label>
+    <textarea name="otherprofs" placeholder="Tool proficiencies, languages, special training...&#10;e.g. Lab Kit, Hacking Suite, Basic, Lang Belta"></textarea>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════
+     COMBAT
+══════════════════════════════════════════ -->
+<div class="section-page" id="tab-combat">
+
+  <div class="sec-heading">Defense</div>
+  <div class="big-stats-row">
+    <div class="big-stat">
+      <input type="text" name="ac" placeholder="10">
+      <label>Armor Class</label>
+    </div>
+    <div class="big-stat">
+      <input type="text" name="initiative" placeholder="+0">
+      <label>Initiative</label>
+    </div>
+    <div class="big-stat">
+      <input type="text" name="speed" placeholder="30">
+      <label>Speed ft</label>
+    </div>
+  </div>
+
+  <div class="sec-heading">Hit Points</div>
+  <div class="hp-card">
+    <div class="hp-max-bar">
+      <label>Hit Point Maximum</label>
+      <input type="text" name="maxhp" placeholder="6">
+    </div>
+    <div class="hp-main">
+      <div class="hp-cell">
+        <label>Current HP</label>
+        <input type="text" name="currenthp">
+      </div>
+      <div class="hp-cell">
+        <label>Temporary HP</label>
+        <input type="text" name="temphp">
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-heading">Endurance</div>
+  <div class="hd-saves-row">
+    <div class="hd-block">
+      <div class="hd-row">
+        <label>Total</label>
+        <input type="text" name="totalhd" placeholder="1d6">
+      </div>
+      <div class="hd-row">
+        <label>Remaining</label>
+        <input type="text" name="remaininghd" placeholder="1d6">
+      </div>
+      <div class="card-title" style="margin-top:8px;">Hit Dice</div>
+    </div>
+    <div class="death-block">
+      <div class="death-row">
+        <label class="s">Successes</label>
+        <div class="death-bubbles">
+          <input type="checkbox" name="ds1">
+          <input type="checkbox" name="ds2">
+          <input type="checkbox" name="ds3">
+        </div>
+      </div>
+      <div class="death-row">
+        <label class="f">Failures</label>
+        <div class="death-bubbles">
+          <input type="checkbox" name="df1">
+          <input type="checkbox" name="df2">
+          <input type="checkbox" name="df3">
+        </div>
+      </div>
+      <div class="card-title" style="margin-top:8px;">Death Saves</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════
+     KINETIC
+══════════════════════════════════════════ -->
+<div class="section-page" id="tab-kinetic">
+
+  <div class="sec-heading">Psionic Stats</div>
+  <div class="kinetic-stats">
+    <div class="k-stat">
+      <input type="text" name="kineticdc" placeholder="—">
+      <label>Save DC</label>
+    </div>
+    <div class="k-stat">
+      <input type="text" name="blastdamage" placeholder="1d10">
+      <label>Blast Damage</label>
+    </div>
+    <div class="k-stat">
+      <input type="text" name="elementalaffinity" placeholder="Water">
+      <label>Element</label>
+    </div>
+  </div>
+
+  <div class="sec-heading">Ability Uses</div>
+  <div class="uses-grid">
+    <div class="uses-card">
+      <label>Kinetic Shielding</label>
+      <div class="bubbles">
+        <input type="checkbox" name="ks1"><input type="checkbox" name="ks2">
+        <input type="checkbox" name="ks3"><input type="checkbox" name="ks4">
+        <input type="checkbox" name="ks5"><input type="checkbox" name="ks6">
+      </div>
+      <div class="uses-note">/ long rest = prof bonus</div>
+    </div>
+    <div class="uses-card">
+      <label>Psionic Barrier</label>
+      <div class="bubbles">
+        <input type="checkbox" name="pb1"><input type="checkbox" name="pb2">
+        <input type="checkbox" name="pb3"><input type="checkbox" name="pb4">
+        <input type="checkbox" name="pb5"><input type="checkbox" name="pb6">
+      </div>
+      <div class="uses-note">/ long rest = prof bonus</div>
+    </div>
+  </div>
+
+  <div class="sec-heading">Attacks &amp; Kinetic Abilities</div>
+  <div class="attacks-card">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:42%">Name / Ability</th>
+          <th style="width:20%">Atk / Save</th>
+          <th style="width:38%">Damage / Effect</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><input type="text" name="atk1" placeholder="Kinetic Blast"></td><td><input type="text" name="atkb1" placeholder="+WIS"></td><td><input type="text" name="atkd1" placeholder="1d10 force"></td></tr>
+        <tr><td><input type="text" name="atk2" placeholder="Elemental Conduit"></td><td><input type="text" name="atkb2" placeholder="—"></td><td><input type="text" name="atkd2" placeholder="+1d6 water"></td></tr>
+        <tr><td><input type="text" name="atk3"></td><td><input type="text" name="atkb3"></td><td><input type="text" name="atkd3"></td></tr>
+        <tr><td><input type="text" name="atk4"></td><td><input type="text" name="atkb4"></td><td><input type="text" name="atkd4"></td></tr>
+        <tr><td><input type="text" name="atk5"></td><td><input type="text" name="atkb5"></td><td><input type="text" name="atkd5"></td></tr>
+      </tbody>
+    </table>
+    <div class="atk-notes">
+      <textarea name="atknotes" placeholder="Collision: 1d10 per 5ft blocked. Knockback: STR save vs DC. Elemental sources: standing liquid, coolant, ice patch, dense mist..."></textarea>
+    </div>
+    <div class="card-title">Attacks &amp; Abilities</div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════
+     EQUIPMENT
+══════════════════════════════════════════ -->
+<div class="section-page" id="tab-equipment">
+
+  <div class="sec-heading">Credits</div>
+  <div class="card" style="margin-bottom:var(--gap);">
+    <div class="credits-row">
+      <label>Credits ₡</label>
+      <input type="text" name="credits" placeholder="0">
+    </div>
+    <div class="card-title">Currency</div>
+  </div>
+
+  <div class="sec-heading">Gear &amp; Inventory</div>
+  <div class="card">
+    <div class="equip-textarea">
+      <textarea name="equipment" placeholder="Sidearm&#10;Light armor&#10;Elemental gauntlets&#10;1x Utility gear item&#10;&#10;Personal effects..."></textarea>
+    </div>
+    <div class="card-title">Equipment</div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════
+     CHARACTER
+══════════════════════════════════════════ -->
+<div class="section-page" id="tab-character">
+
+  <div class="sec-heading">Personality</div>
+  <div class="flavor-card">
+    <div class="flavor-item">
+      <textarea name="personality" placeholder="How do you carry yourself? What habits came from Titan?"></textarea>
+      <label>Personality Traits</label>
+    </div>
+    <div class="flavor-item">
+      <textarea name="ideals" placeholder="What do you believe? What principle won't you compromise?"></textarea>
+      <label>Ideals</label>
+    </div>
+    <div class="flavor-item">
+      <textarea name="bonds" placeholder="Who or what ties you to the world?"></textarea>
+      <label>Bonds</label>
+    </div>
+    <div class="flavor-item">
+      <textarea name="flaws" placeholder="What weakness do you carry? What from the eruption still haunts you?"></textarea>
+      <label>Flaws</label>
+    </div>
+  </div>
+
+  <div class="sec-heading">Features &amp; Traits</div>
+  <div class="big-textarea">
+    <label>Features &amp; Class Traits</label>
+    <textarea name="features" placeholder="Kinetic Blast — 1d10 force, 60ft, +WIS to hit&#10;Kinetic Shielding — bonus action, WIS+Prof temp HP&#10;Psionic Control — bonus action, move 10lb object&#10;Elemental Affinity: Water — +1d6 near valid source&#10;&#10;Low-G Adaptation (Belter)&#10;Vacuum-Born Reflexes (Belter)&#10;Station-Bred Ingenuity (Belter)&#10;&#10;Technical Clearance (Research Analyst)"></textarea>
+  </div>
+
+  <div class="sec-heading">Origin &amp; Background</div>
+  <div class="big-textarea">
+    <label>Origin &amp; Background Notes</label>
+    <textarea name="originnotes" placeholder="Vanta Research outpost, Titan equatorial region near Sotra Patera. Belter-raised in sealed compound. Survived Doom Mons cryovolcanic event. Neural resonance triggered by ammonia-tholin atmospheric saturation. Elemental affinity: ice / water."></textarea>
+  </div>
+
+</div>
+
+<!-- Save bar -->
+<div class="save-bar">
+  <button class="save-btn" id="saveBtn">Save URL</button>
+  <button class="save-btn danger" id="clearBtn">Clear</button>
+  <span class="save-status" id="saveStatus">No saved data</span>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ── TABS ──────────────────────────────────────────────────
+const tabs = document.querySelectorAll('.tab-btn');
+const pages = document.querySelectorAll('.section-page');
+const nameInput = document.getElementById('charnameInput');
+const nameDisplay = document.getElementById('nameDisplay');
+
+tabs.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const target = btn.dataset.tab;
+    tabs.forEach(b => b.classList.remove('active'));
+    pages.forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + target).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+});
+
+nameInput.addEventListener('input', () => {
+  nameDisplay.textContent = nameInput.value || 'Character Name';
+  markDirty();
+});
+
+// ── FIELDS ───────────────────────────────────────────────
+// Collect every named input + textarea + checkbox
+function getFields() {
+  return document.querySelectorAll('input[name], textarea[name]');
+}
+
+// ── DIRTY TRACKING ───────────────────────────────────────
+const statusEl = document.getElementById('saveStatus');
+let isDirty = false;
+let savedHash = null;
+
+function markDirty() {
+  if (isDirty) return;
+  isDirty = true;
+  statusEl.className = 'save-status dirty';
+  statusEl.textContent = 'Unsaved changes';
+}
+
+function markSaved(hash) {
+  isDirty = false;
+  savedHash = hash;
+  statusEl.className = 'save-status ok';
+  statusEl.textContent = 'Saved — URL copied';
+  setTimeout(() => {
+    if (!isDirty) {
+      statusEl.className = 'save-status';
+      statusEl.textContent = 'Sheet saved in URL';
+    }
+  }, 3000);
+}
+
+function markLoaded() {
+  isDirty = false;
+  statusEl.className = 'save-status ok';
+  statusEl.textContent = 'Sheet loaded from URL';
+  setTimeout(() => {
+    if (!isDirty) {
+      statusEl.className = 'save-status';
+      statusEl.textContent = 'Sheet saved in URL';
+    }
+  }, 3000);
+}
+
+// Watch all fields for changes
+document.addEventListener('input', (e) => {
+  if (e.target.matches('input[name], textarea[name]')) markDirty();
+});
+document.addEventListener('change', (e) => {
+  if (e.target.matches('input[type="checkbox"]')) markDirty();
+});
+
+// ── SERIALISE / DESERIALISE ──────────────────────────────
+function collectData() {
+  const data = {};
+  getFields().forEach(el => {
+    if (el.type === 'checkbox') {
+      data[el.name] = el.checked;
+    } else {
+      data[el.name] = el.value;
+    }
+  });
+  return data;
+}
+
+function applyData(data) {
+  getFields().forEach(el => {
+    if (!(el.name in data)) return;
+    if (el.type === 'checkbox') {
+      el.checked = !!data[el.name];
+    } else {
+      el.value = data[el.name];
+    }
+  });
+  // Sync the display name
+  nameDisplay.textContent = data['charname'] || 'Character Name';
+}
+
+// ── COMPRESSION ──────────────────────────────────────────
+async function compress(str) {
+  const bytes = new TextEncoder().encode(str);
+  const cs = new CompressionStream('gzip');
+  const writer = cs.writable.getWriter();
+  writer.write(bytes);
+  writer.close();
+  const chunks = [];
+  const reader = cs.readable.getReader();
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    chunks.push(value);
+  }
+  const out = new Uint8Array(chunks.reduce((a, c) => a + c.length, 0));
+  let offset = 0;
+  for (const chunk of chunks) { out.set(chunk, offset); offset += chunk.length; }
+  // base64url encode
+  return btoa(String.fromCharCode(...out))
+    .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
+async function decompress(b64url) {
+  const b64 = b64url.replace(/-/g, '+').replace(/_/g, '/');
+  const binary = atob(b64);
+  const bytes = Uint8Array.from(binary, c => c.charCodeAt(0));
+  const ds = new DecompressionStream('gzip');
+  const writer = ds.writable.getWriter();
+  writer.write(bytes);
+  writer.close();
+  const chunks = [];
+  const reader = ds.readable.getReader();
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    chunks.push(value);
+  }
+  const out = new Uint8Array(chunks.reduce((a, c) => a + c.length, 0));
+  let offset = 0;
+  for (const chunk of chunks) { out.set(chunk, offset); offset += chunk.length; }
+  return new TextDecoder().decode(out);
+}
+
+// ── TOAST ─────────────────────────────────────────────────
+let toastTimer = null;
+function showToast(msg, type = '') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'toast show' + (type ? ' ' + type : '');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { el.className = 'toast'; }, 2200);
+}
+
+// ── SAVE ──────────────────────────────────────────────────
+document.getElementById('saveBtn').addEventListener('click', async () => {
+  try {
+    const data = collectData();
+    const json = JSON.stringify(data);
+    const encoded = await compress(json);
+    const url = window.location.href.split('#')[0] + '#' + encoded;
+    window.history.replaceState(null, '', url);
+    await navigator.clipboard.writeText(url);
+    markSaved(encoded);
+    showToast('URL copied to clipboard', 'ok');
+  } catch (e) {
+    statusEl.className = 'save-status err';
+    statusEl.textContent = 'Save failed';
+    showToast('Save failed: ' + e.message, 'err');
+  }
+});
+
+// ── CLEAR ─────────────────────────────────────────────────
+document.getElementById('clearBtn').addEventListener('click', () => {
+  if (!confirm('Clear all fields and reset the sheet?')) return;
+  getFields().forEach(el => {
+    if (el.type === 'checkbox') el.checked = false;
+    else el.value = '';
+  });
+  nameDisplay.textContent = 'Character Name';
+  window.history.replaceState(null, '', window.location.pathname);
+  isDirty = false;
+  statusEl.className = 'save-status';
+  statusEl.textContent = 'Sheet cleared';
+  showToast('Sheet cleared');
+});
+
+// ── LOAD ON OPEN ──────────────────────────────────────────
+async function loadFromHash() {
+  const hash = window.location.hash.slice(1);
+  if (!hash) {
+    statusEl.textContent = 'No saved data';
+    return;
+  }
+  try {
+    statusEl.textContent = 'Loading...';
+    const json = await decompress(hash);
+    const data = JSON.parse(json);
+    applyData(data);
+    markLoaded();
+    showToast('Sheet loaded', 'ok');
+  } catch (e) {
+    statusEl.className = 'save-status err';
+    statusEl.textContent = 'Could not load — bad URL?';
+    showToast('Load failed', 'err');
+  }
+}
+
+loadFromHash();
+</script>
+</body>
+</html>
