@@ -81,7 +81,6 @@ body::before {
 }
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.25} }
 .top-bar .charname-display {
-  flex: 1;
   font-family: var(--cond);
   font-size: 18px;
   font-weight: 600;
@@ -89,6 +88,7 @@ body::before {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  margin-bottom: 4px;
 }
 
 /* ── SECTION TABS ── */
@@ -102,6 +102,7 @@ body::before {
   overflow-x: auto;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
+  justify-content: center;
 }
 .tab-nav::-webkit-scrollbar { display: none; }
 .tab-btn {
@@ -695,6 +696,7 @@ input[type="checkbox"]:checked {
   align-items: center;
   gap: 8px;
   padding: 8px 12px;
+  justify-content: center;
 }
 .save-btn {
   font-family: var(--mono);
@@ -718,7 +720,6 @@ input[type="checkbox"]:checked {
   border-color: rgba(224,92,92,0.35);
 }
 .save-status {
-  flex: 1;
   font-family: var(--mono);
   font-size: 10px;
   color: var(--text-dim);
@@ -784,6 +785,10 @@ input[type="checkbox"]:checked {
   background: var(--accent-faint);
   border-color: var(--accent-dim);
 }
+.class-levels { margin-top: 8px; display: flex; flex-direction: column; gap: 4px; }
+.class-level-row { display: flex; align-items: center; gap: 8px; }
+.class-level-label { font-family: var(--mono); font-size: 10px; color: var(--accent-dim); letter-spacing: 0.1em; text-transform: uppercase; flex: 1; }
+.class-level-row input[type="number"] { width: 48px; font-family: var(--mono); font-size: 16px; color: var(--accent); text-align: center; border-bottom: 1px dashed var(--accent-faint); background: transparent; border-top: none; border-left: none; border-right: none; outline: none; }
 
 input[type="number"] {
   background: transparent;
@@ -801,59 +806,18 @@ input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; }
 input[type="number"]:focus { color: #fff; }
 
-/* ── CLASS FEATURE CARDS ── */
-.class-feature {
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  margin-bottom: 8px;
-  overflow: hidden;
-}
-.class-feature-header {
-  display: flex;
-  align-items: baseline;
-  gap: 10px;
-  padding: 8px 12px;
-  background: var(--bg3);
-  border-bottom: 1px solid var(--border);
-}
-.feature-level-badge {
-  font-family: var(--mono);
-  font-size: 8px;
-  color: var(--accent-dim);
-  letter-spacing: 0.12em;
-  flex-shrink: 0;
-}
-.feature-name {
-  font-family: var(--cond);
-  font-size: 14px;
-  font-weight: 600;
-  color: #e0e4f0;
-}
-.class-feature-body {
-  padding: 8px 12px 10px;
-  font-size: 12px;
+/* ── CLASS NOTE (passive feature label) ── */
+.class-note {
+  font-size: 10px;
   color: var(--text-dim);
-  line-height: 1.55;
+  padding: 5px 8px;
+  margin-bottom: 4px;
+  border-left: 2px solid var(--accent-faint);
+  background: var(--bg2);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  line-height: 1.5;
 }
-.class-feature-body strong { color: var(--text); font-weight: 500; }
-.feature-input-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 6px;
-  padding-top: 6px;
-  border-top: 1px solid var(--border);
-}
-.feature-input-row label { font-size: 8px; flex: 1; }
-.feature-input-row input[type="text"] {
-  width: 60px;
-  font-family: var(--mono);
-  font-size: 12px;
-  color: var(--accent);
-  text-align: right;
-  border-bottom: 1px solid var(--border);
-}
+.class-note strong { color: var(--text); font-weight: 500; }
 
 /* ── DESKTOP OVERRIDE ── */
 @media (min-width: 700px) {
@@ -935,11 +899,29 @@ input[type="number"]:focus { color: #fff; }
         <input type="checkbox" name="class-operator" style="display:none">
         <input type="checkbox" name="class-kineticist" style="display:none">
         <input type="checkbox" name="class-specialist" style="display:none">
+        <div class="class-levels" id="classLevels">
+          <div class="class-level-row" data-class="marine" style="display:none">
+            <span class="class-level-label">Marine</span>
+            <input type="number" name="class-level-marine" min="1" max="20" placeholder="1">
+          </div>
+          <div class="class-level-row" data-class="engineer" style="display:none">
+            <span class="class-level-label">Engineer</span>
+            <input type="number" name="class-level-engineer" min="1" max="20" placeholder="1">
+          </div>
+          <div class="class-level-row" data-class="operator" style="display:none">
+            <span class="class-level-label">Operator</span>
+            <input type="number" name="class-level-operator" min="1" max="20" placeholder="1">
+          </div>
+          <div class="class-level-row" data-class="kineticist" style="display:none">
+            <span class="class-level-label">Kineticist</span>
+            <input type="number" name="class-level-kineticist" min="1" max="20" placeholder="1">
+          </div>
+          <div class="class-level-row" data-class="specialist" style="display:none">
+            <span class="class-level-label">Specialist</span>
+            <input type="number" name="class-level-specialist" min="1" max="20" placeholder="1">
+          </div>
+        </div>
         <label>Class</label>
-      </div>
-      <div class="field">
-        <input type="number" name="level" id="levelInput" min="1" max="20" placeholder="1">
-        <label>Level</label>
       </div>
       <div class="field">
         <input type="text" name="specialization">
@@ -1294,729 +1276,316 @@ input[type="number"]:focus { color: #fff; }
      CLASS — MARINE
 ══════════════════════════════════════════ -->
 <div class="section-page" id="tab-class-marine">
-  <div class="sec-heading">Marine — Class Features</div>
-  <p style="font-size:11px;color:var(--muted);margin:0 0 8px">Hit Die: d10 · Saves: STR &amp; CON · Armor: All · Weapons: All</p>
+  <div class="sec-heading">Combat Momentum</div>
+  <p style="font-size:10px;color:var(--muted);margin:-2px 0 8px">d10 HD · STR &amp; CON saves · MP = PB × 5 · recovers on short or long rest</p>
 
-  <div class="class-feature" data-min-level="1">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 1</span>
-      <span class="feature-name">Combat Style</span>
+  <!-- MP Pool -->
+  <div class="kinetic-stats">
+    <div class="k-stat">
+      <input type="number" name="marine-mp-max" min="0" placeholder="—">
+      <label>MP Max</label>
     </div>
-    <div class="class-feature-body">
-      Choose a combat style at 1st level that defines your fighting approach.
-      <div class="feature-input-row"><label>Style</label><input type="text" name="marine-combat-style" placeholder="—"></div>
+    <div class="k-stat">
+      <input type="number" name="marine-mp-cur" min="0" placeholder="—">
+      <label>MP Current</label>
+    </div>
+    <div class="k-stat">
+      <input type="text" name="marine-combat-style" placeholder="—">
+      <label>Combat Style</label>
     </div>
   </div>
 
-  <div class="class-feature" data-min-level="1">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 1</span>
-      <span class="feature-name">Combat Momentum</span>
-    </div>
-    <div class="class-feature-body">
-      You have a pool of <strong>Momentum Points (MP)</strong> equal to your Proficiency Bonus × 5. Spend MP to fuel special combat maneuvers. Recover all MP on a short or long rest.
-      <div class="feature-input-row"><label>MP Max</label><input type="number" name="marine-mp-max" min="0" placeholder="—" style="width:60px"></div>
-      <div class="feature-input-row"><label>MP Current</label><input type="number" name="marine-mp-cur" min="0" placeholder="—" style="width:60px"></div>
+  <div class="sec-heading">Ability Uses</div>
+
+  <!-- L2: Action Surge -->
+  <div class="uses-grid" data-min-level="2" style="grid-template-columns:1fr">
+    <div class="uses-card">
+      <label>Action Surge</label>
+      <div class="bubbles">
+        <input type="checkbox" name="marine-as1">
+      </div>
+      <div class="uses-note">/ short rest · take one additional action</div>
     </div>
   </div>
 
-  <div class="class-feature" data-min-level="2">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 2</span>
-      <span class="feature-name">Action Surge</span>
+  <!-- L3: Combat Doctrine subclass -->
+  <div class="kinetic-stats" data-min-level="3" style="grid-template-columns:1fr">
+    <div class="k-stat">
+      <input type="text" name="marine-doctrine" placeholder="—">
+      <label>Combat Doctrine</label>
     </div>
-    <div class="class-feature-body">
-      Once per short rest, take one additional action on your turn.
+  </div>
+  <div class="class-note" data-min-level="3">Subclass options: <strong>Demolitionist · Sniper · Heavy Gunner</strong></div>
+
+  <!-- L9: Combat Resilience -->
+  <div class="uses-grid" data-min-level="9" style="grid-template-columns:1fr">
+    <div class="uses-card">
+      <label>Combat Resilience</label>
+      <div class="bubbles">
+        <input type="checkbox" name="marine-cr1">
+        <input type="checkbox" name="marine-cr2">
+        <input type="checkbox" name="marine-cr3">
+        <input type="checkbox" name="marine-cr4">
+        <input type="checkbox" name="marine-cr5">
+      </div>
+      <div class="uses-note">/ long rest · reaction to reduce incoming dmg by CON mod</div>
     </div>
   </div>
 
-  <div class="class-feature" data-min-level="3">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 3</span>
-      <span class="feature-name">Combat Doctrine</span>
-    </div>
-    <div class="class-feature-body">
-      Choose your Combat Doctrine subclass: <em>Demolitionist</em>, <em>Sniper</em>, or <em>Heavy Gunner</em>.
-      <div class="feature-input-row"><label>Doctrine</label><input type="text" name="marine-doctrine" placeholder="—"></div>
-    </div>
-  </div>
-
-  <div class="class-feature" data-min-level="4">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 4</span>
-      <span class="feature-name">Ability Score Improvement</span>
-    </div>
-    <div class="class-feature-body">
-      Increase one ability score by 2, or two ability scores by 1 each (max 20). You may take a feat instead.
+  <!-- L13: Indomitable -->
+  <div class="uses-grid" data-min-level="13" style="grid-template-columns:1fr">
+    <div class="uses-card">
+      <label>Indomitable</label>
+      <div class="bubbles">
+        <input type="checkbox" name="marine-ind1">
+      </div>
+      <div class="uses-note">/ long rest · reroll one failed saving throw</div>
     </div>
   </div>
 
-  <div class="class-feature" data-min-level="5">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 5</span>
-      <span class="feature-name">Extra Attack</span>
-    </div>
-    <div class="class-feature-body">
-      When you take the Attack action, you can attack twice instead of once.
-    </div>
-  </div>
+  <!-- L18+ milestones -->
+  <div class="class-note" data-min-level="18"><strong>Apex Soldier (L18)</strong> — critical hits on a roll of 19 or 20</div>
+  <div class="class-note" data-min-level="20"><strong>War Machine Protocol (L20)</strong> — Action Surge recharges each turn; MP max doubles; maneuvers cost half MP</div>
 
-  <div class="class-feature" data-min-level="6">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 6</span>
-      <span class="feature-name">Tactical Reflexes</span>
-    </div>
-    <div class="class-feature-body">
-      You have advantage on initiative rolls and cannot be surprised while conscious.
-    </div>
-  </div>
-
-  <div class="class-feature" data-min-level="7">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 7</span>
-      <span class="feature-name">Combat Doctrine Feature</span>
-    </div>
-    <div class="class-feature-body">
-      You gain an additional feature from your chosen Combat Doctrine subclass.
-    </div>
-  </div>
-
-  <div class="class-feature" data-min-level="8">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 8</span>
-      <span class="feature-name">Ability Score Improvement</span>
-    </div>
-    <div class="class-feature-body">
-      Increase one ability score by 2, or two ability scores by 1 each (max 20). You may take a feat instead.
-    </div>
-  </div>
-
-  <div class="class-feature" data-min-level="9">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 9</span>
-      <span class="feature-name">Combat Resilience</span>
-    </div>
-    <div class="class-feature-body">
-      When you take damage, you can use your reaction to reduce it by your Constitution modifier (minimum 1). Usable a number of times equal to your CON modifier per long rest.
-    </div>
-  </div>
-
-  <div class="class-feature" data-min-level="11">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 11</span>
-      <span class="feature-name">Extra Attack (2)</span>
-    </div>
-    <div class="class-feature-body">
-      When you take the Attack action, you can attack three times instead of twice.
-    </div>
-  </div>
-
-  <div class="class-feature" data-min-level="13">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 13</span>
-      <span class="feature-name">Indomitable</span>
-    </div>
-    <div class="class-feature-body">
-      Once per long rest, reroll a failed saving throw. You must use the new result.
-    </div>
-  </div>
-
-  <div class="class-feature" data-min-level="18">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 18</span>
-      <span class="feature-name">Apex Soldier</span>
-    </div>
-    <div class="class-feature-body">
-      Your attack rolls score a critical hit on a roll of 19 or 20.
-    </div>
-  </div>
-
-  <div class="class-feature" data-min-level="20">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 20</span>
-      <span class="feature-name">War Machine Protocol</span>
-    </div>
-    <div class="class-feature-body">
-      You become an unstoppable force of combat. You regain your Action Surge use at the start of every turn. Your MP maximum doubles and Combat Momentum maneuvers cost half as many MP (rounded down).
-    </div>
-  </div>
+  <div class="sec-heading">Notes</div>
+  <textarea name="marine-notes" style="height:80px;width:100%;box-sizing:border-box" placeholder="Maneuvers, doctrine abilities, etc."></textarea>
 </div>
 
 <!-- ══════════════════════════════════════════
      CLASS — ENGINEER
 ══════════════════════════════════════════ -->
 <div class="section-page" id="tab-class-engineer">
-  <div class="sec-heading">Engineer — Class Features</div>
-  <p style="font-size:11px;color:var(--muted);margin:0 0 8px">Hit Die: d6 · Saves: INT &amp; CON · Key Ability: Intelligence</p>
+  <div class="sec-heading">Tech Points</div>
+  <p style="font-size:10px;color:var(--muted);margin:-2px 0 8px">d6 HD · INT &amp; CON saves · TP = level + INT mod · recovers on long rest</p>
 
-  <div class="class-feature" data-min-level="1">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 1</span>
-      <span class="feature-name">Field Engineer</span>
+  <div class="kinetic-stats">
+    <div class="k-stat">
+      <input type="number" name="eng-tp-max" min="0" placeholder="—">
+      <label>TP Max</label>
     </div>
-    <div class="class-feature-body">
-      You are proficient with Engineering tools and light armor. You have advantage on INT (Engineering) checks made to repair or modify equipment.
+    <div class="k-stat">
+      <input type="number" name="eng-tp-cur" min="0" placeholder="—">
+      <label>TP Current</label>
+    </div>
+    <div class="k-stat">
+      <input type="text" name="eng-specialization" placeholder="—">
+      <label>Specialization</label>
     </div>
   </div>
+  <div class="class-note">Specialization (L3): <strong>Mechanist · Systems Navigator · Technical Savant</strong></div>
+  <div class="sec-heading">Rapid Repair</div>
+  <div class="class-note">Bonus action · 1 TP · restores 1d6+INT HP (→2d6 L5, →3d6 L9, →4d6 L13, →5d6 L17) · <strong>L6:</strong> costs 0 TP</div>
+  <div class="sec-heading">Drone</div>
+  <div class="class-note">HP = level×2+INT · repair 1 TP (1d6+INT) · rebuild on short rest</div>
 
-  <div class="class-feature" data-min-level="1">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 1</span>
-      <span class="feature-name">Fabrication Protocols &amp; Rapid Repair</span>
-    </div>
-    <div class="class-feature-body">
-      <strong>Fabrication Protocols</strong> — you have a pool of <strong>Tech Points (TP)</strong> that fuel your abilities. TP = your Engineer level + INT modifier. Recover all TP on a long rest.<br>
-      <strong>Rapid Repair</strong> (1 TP) — bonus action, restore 1d6 + INT modifier HP to yourself or a creature you touch. Scales: +1d6 at levels 5, 9, 13, 17.
-      <div class="feature-input-row"><label>TP Max</label><input type="number" name="eng-tp-max" min="0" placeholder="—" style="width:60px"></div>
-      <div class="feature-input-row"><label>TP Current</label><input type="number" name="eng-tp-cur" min="0" placeholder="—" style="width:60px"></div>
-    </div>
+  <div class="kinetic-stats" data-min-level="2">
+    <div class="k-stat"><input type="text" name="eng-drone1-type" placeholder="—"><label>Drone 1 Type</label></div>
+    <div class="k-stat"><input type="number" name="eng-drone1-max" min="0" placeholder="—"><label>Drone 1 HP Max</label></div>
+    <div class="k-stat"><input type="number" name="eng-drone1-cur" min="0" placeholder="—"><label>Drone 1 HP</label></div>
+  </div>
+  <div class="kinetic-stats" data-min-level="11">
+    <div class="k-stat"><input type="text" name="eng-drone2-type" placeholder="—"><label>Drone 2 Type</label></div>
+    <div class="k-stat"><input type="number" name="eng-drone2-max" min="0" placeholder="—"><label>Drone 2 HP Max</label></div>
+    <div class="k-stat"><input type="number" name="eng-drone2-cur" min="0" placeholder="—"><label>Drone 2 HP</label></div>
   </div>
 
-  <div class="class-feature" data-min-level="2">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 2</span>
-      <span class="feature-name">Drone Deployment</span>
-    </div>
-    <div class="class-feature-body">
-      Deploy a combat/support drone (1 action). The drone acts on your initiative, obeys your commands, and has HP equal to your Engineer level × 2 + INT modifier. Repair a drone for 1 TP (restores 1d6 + INT HP). If destroyed, rebuild over a short rest.
-      <div class="feature-input-row"><label>Drone Type</label><input type="text" name="eng-drone-type" placeholder="—"></div>
-    </div>
-  </div>
+  <div class="class-note" data-min-level="5"><strong>Overclock (L5)</strong> — bonus action, 2 TP: take one additional action this turn</div>
+  <div class="class-note" data-min-level="13"><strong>System Override (L13)</strong> — 3 TP: seize control of any electronic/mechanical system within 60 ft (1 min, Conc.)</div>
+  <div class="class-note" data-min-level="18"><strong>Master Engineer (L18)</strong> — TP max +5; Overclock free once/turn; repairs restore max HP</div>
+  <div class="class-note" data-min-level="20"><strong>Apex Technologist (L20)</strong> — 3 drones; regain all TP at start of combat; System Override free</div>
 
-  <div class="class-feature" data-min-level="3">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 3</span>
-      <span class="feature-name">Network Systems &amp; Subclass</span>
-    </div>
-    <div class="class-feature-body">
-      <strong>Network Systems</strong> — you can interface with electronic systems within 30 ft as a bonus action (no tools required).<br>
-      Choose your Engineering Specialization: <em>Mechanist</em>, <em>Systems Navigator</em>, or <em>Technical Savant</em>.
-      <div class="feature-input-row"><label>Specialization</label><input type="text" name="eng-specialization" placeholder="—"></div>
-    </div>
-  </div>
+  <div class="sec-heading">Notes</div>
+  <textarea name="eng-notes" style="height:80px;width:100%;box-sizing:border-box" placeholder="Drone stats, fabrications, etc."></textarea>
 
-  <div class="class-feature" data-min-level="5">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 5</span>
-      <span class="feature-name">Overclock</span>
-    </div>
-    <div class="class-feature-body">
-      Spend <strong>2 TP</strong> as a bonus action to take one additional action (Attack, Dash, Disengage, or Use Object) on your turn.
-    </div>
-  </div>
-
-  <div class="class-feature" data-min-level="6">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 6</span>
-      <span class="feature-name">Efficient Systems</span>
-    </div>
-    <div class="class-feature-body">
-      Rapid Repair and drone repair each cost 1 fewer TP (minimum 0). You also recover 1 TP at the start of each of your turns in combat.
-    </div>
-  </div>
-
-  <div class="class-feature" data-min-level="9">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 9</span>
-      <span class="feature-name">Advanced Repair</span>
-    </div>
-    <div class="class-feature-body">
-      Rapid Repair now restores 4d6 + INT HP. You can spend 2 TP to remove one condition (blinded, deafened, frightened, paralyzed, poisoned, or stunned) from a creature you touch.
-    </div>
-  </div>
-
-  <div class="class-feature" data-min-level="11">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 11</span>
-      <span class="feature-name">Dual Deployment</span>
-    </div>
-    <div class="class-feature-body">
-      You can have up to <strong>two drones</strong> active simultaneously. Each drone can receive independent commands on your turn (no action required).
-    </div>
-  </div>
-
-  <div class="class-feature" data-min-level="13">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 13</span>
-      <span class="feature-name">System Override</span>
-    </div>
-    <div class="class-feature-body">
-      Spend <strong>3 TP</strong> as an action to seize control of any mechanical, electronic, or networked system within 60 ft. It obeys your commands for up to 1 minute (Concentration). While controlled, the system cannot be used against you.
-    </div>
-  </div>
-
-  <div class="class-feature" data-min-level="18">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 18</span>
-      <span class="feature-name">Master Engineer</span>
-    </div>
-    <div class="class-feature-body">
-      Your TP maximum increases by 5. Overclock no longer costs TP — you can use it freely once per turn. All repair abilities restore the maximum possible HP.
-    </div>
-  </div>
-
-  <div class="class-feature" data-min-level="20">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 20</span>
-      <span class="feature-name">Apex Technologist</span>
-    </div>
-    <div class="class-feature-body">
-      You can deploy up to three drones. At the start of combat you regain all expended TP. System Override requires no TP and has no duration limit.
-    </div>
-  </div>
-</div>
 
 <!-- ══════════════════════════════════════════
      CLASS — OPERATOR
 ══════════════════════════════════════════ -->
 <div class="section-page" id="tab-class-operator">
-  <div class="sec-heading">Operator — Class Features</div>
-  <p style="font-size:11px;color:var(--muted);margin:0 0 8px">Hit Die: d8 · Saves: INT &amp; CHA · CP = 5 + PB + INT mod</p>
+  <div class="sec-heading">Command Points</div>
+  <p style="font-size:10px;color:var(--muted);margin:-2px 0 8px">d8 HD · INT &amp; CHA saves · CP = 5 + PB + INT mod · full on long rest, ½ on short</p>
 
-  <div class="class-feature" data-min-level="1">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 1</span>
-      <span class="feature-name">Tactical Command</span>
+  <div class="kinetic-stats">
+    <div class="k-stat"><input type="number" name="op-cp-max" min="0" placeholder="—"><label>CP Max</label></div>
+    <div class="k-stat"><input type="number" name="op-cp-cur" min="0" placeholder="—"><label>CP Current</label></div>
+    <div class="k-stat"><input type="text" name="op-subclass" placeholder="—"><label>Subclass</label></div>
+  </div>
+  <div class="class-note">Subclass (L3): <strong>Tactical Commander · Defensive Coordinator · Strategic Controller</strong></div>
+
+  <div class="sec-heading">Ability Uses</div>
+  <div class="uses-grid" style="grid-template-columns:1fr">
+    <div class="uses-card">
+      <label>Battlefield Analysis</label>
+      <div class="bubbles">
+        <input type="checkbox" name="op-ba1"><input type="checkbox" name="op-ba2">
+        <input type="checkbox" name="op-ba3"><input type="checkbox" name="op-ba4">
+        <input type="checkbox" name="op-ba5">
+      </div>
+      <div class="uses-note">/ long rest · bonus action: learn AC &amp; resistances of creature within 60 ft</div>
     </div>
-    <div class="class-feature-body">
-      You have a pool of <strong>Command Points (CP)</strong> equal to 5 + Proficiency Bonus + INT modifier. CP fuel your combat protocols. Recover all CP on a long rest; recover half (rounded down) on a short rest.
-      <div class="feature-input-row"><label>CP Max</label><input type="number" name="op-cp-max" min="0" placeholder="—" style="width:60px"></div>
-      <div class="feature-input-row"><label>CP Current</label><input type="number" name="op-cp-cur" min="0" placeholder="—" style="width:60px"></div>
+  </div>
+  <div class="uses-grid" data-min-level="2" style="grid-template-columns:1fr">
+    <div class="uses-card">
+      <label>Tactical Forecast</label>
+      <div class="bubbles">
+        <input type="checkbox" name="op-fc1"><input type="checkbox" name="op-fc2">
+        <input type="checkbox" name="op-fc3">
+      </div>
+      <div class="uses-note">Available forecast rolls this combat · replace any roll with a forecast result (2d20; →3d20 at L10)</div>
     </div>
   </div>
 
-  <div class="class-feature" data-min-level="1">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 1</span>
-      <span class="feature-name">Battlefield Analysis &amp; Weak Point Exploitation</span>
-    </div>
-    <div class="class-feature-body">
-      <strong>Battlefield Analysis</strong> — you can use a bonus action to analyze a creature within 60 ft. You learn its AC and any damage immunities/resistances. Usable INT modifier times per long rest.<br>
-      <strong>Weak Point Exploitation</strong> (1 CP) — when you or an ally hits a creature you have analyzed, add your INT modifier to the damage roll.
-    </div>
-  </div>
+  <div class="sec-heading">Combat Protocols</div>
+  <div class="class-note" data-min-level="3"><strong>Advance</strong> (1 CP) — ally moves ½ speed · <strong>Focus Fire</strong> (1 CP) — ally has adv on next attack · <strong>Defend</strong> (1 CP) — ally +2 AC until your next turn</div>
+  <div class="class-note" data-min-level="5"><strong>Combat Stimulant</strong> (2 CP, L5) — ally gets extra attack this turn; ignores difficult terrain</div>
+  <div class="class-note" data-min-level="6"><strong>Efficient Command (L6)</strong> — protocols cost 1 fewer CP; recover 1 CP each turn in combat</div>
+  <div class="class-note" data-min-level="9"><strong>Advanced Tactics (L9)</strong> — Suppressive Fire (2 CP) · Coordinated Strike (2 CP) · issue 2 protocols per bonus action</div>
+  <div class="class-note" data-min-level="10"><strong>Protocol Scaling (L10)</strong> — effects scale with INT mod; Forecast → 3d20</div>
+  <div class="class-note" data-min-level="11"><strong>Rapid Coordination (L11)</strong> — first protocol each turn is free (no bonus action needed)</div>
+  <div class="class-note" data-min-level="13"><strong>Total Command</strong> (3 CP, L13) — action: all allies within 60 ft move + attack as a free reaction</div>
+  <div class="class-note" data-min-level="17"><strong>Command Mastery (L17)</strong> — CP max +INT mod; allies in 60 ft get +½ INT mod to attacks</div>
+  <div class="class-note" data-min-level="18"><strong>Master Strategist (L18)</strong> — Forecast refreshes each round; hold up to 5 results</div>
+  <div class="class-note" data-min-level="20"><strong>Supreme Commander (L20)</strong> — all protocols free; CP fully recharges each round; allies immune to surprise</div>
 
-  <div class="class-feature" data-min-level="2">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 2</span>
-      <span class="feature-name">Tactical Forecast</span>
-    </div>
-    <div class="class-feature-body">
-      At the start of combat, roll <strong>2d20</strong> and set the results aside as <em>Forecast rolls</em>. Before any creature makes an attack roll, ability check, or saving throw, you may replace that roll with one of your Forecast results (no action required). You lose unused Forecast rolls when combat ends.
-      <p style="font-size:10px;color:var(--muted);margin:4px 0 0">Improves to 3d20 at level 10.</p>
-    </div>
-  </div>
+  <div class="sec-heading">Notes</div>
+  <textarea name="op-notes" style="height:80px;width:100%;box-sizing:border-box" placeholder="Protocol tracking, subclass abilities, etc."></textarea>
 
-  <div class="class-feature" data-min-level="3">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 3</span>
-      <span class="feature-name">Combat Protocols &amp; Subclass</span>
-    </div>
-    <div class="class-feature-body">
-      Unlock CP-powered <strong>Combat Protocols</strong> — tactical commands issued to allies as a bonus action:<br>
-      • <em>Advance</em> (1 CP) — one ally within 60 ft may immediately move up to half their speed.<br>
-      • <em>Focus Fire</em> (1 CP) — one ally within 60 ft has advantage on their next attack roll this turn.<br>
-      • <em>Defend</em> (1 CP) — one ally within 60 ft gains +2 AC until the start of your next turn.<br>
-      Choose your Operator Subclass: <em>Tactical Commander</em>, <em>Defensive Coordinator</em>, or <em>Strategic Controller</em>.
-      <div class="feature-input-row"><label>Subclass</label><input type="text" name="op-subclass" placeholder="—"></div>
-    </div>
-  </div>
-
-  <div class="class-feature" data-min-level="5">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 5</span>
-      <span class="feature-name">Combat Stimulant</span>
-    </div>
-    <div class="class-feature-body">
-      Spend <strong>2 CP</strong> as a bonus action to grant one ally within 30 ft an extra attack on their next Attack action this turn. The ally also ignores difficult terrain until the end of their turn.
-    </div>
-  </div>
-
-  <div class="class-feature" data-min-level="6">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 6</span>
-      <span class="feature-name">Efficient Command</span>
-    </div>
-    <div class="class-feature-body">
-      All Combat Protocols cost 1 fewer CP (minimum 0). You recover 1 CP at the start of each of your turns during combat.
-    </div>
-  </div>
-
-  <div class="class-feature" data-min-level="9">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 9</span>
-      <span class="feature-name">Advanced Tactics &amp; Tactical Layering</span>
-    </div>
-    <div class="class-feature-body">
-      <strong>Advanced Tactics</strong> — unlock two additional protocols:<br>
-      • <em>Suppressive Fire</em> (2 CP) — one enemy within 60 ft has disadvantage on all attacks until the start of your next turn.<br>
-      • <em>Coordinated Strike</em> (2 CP) — up to two allies within 60 ft may use their reaction to immediately make one weapon attack against a creature you designate.<br>
-      <strong>Tactical Layering</strong> — you can issue two Combat Protocols per bonus action instead of one.
-    </div>
-  </div>
-
-  <div class="class-feature" data-min-level="10">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 10</span>
-      <span class="feature-name">Protocol Scaling &amp; Forecast Improvement</span>
-    </div>
-    <div class="class-feature-body">
-      Your Combat Protocol effects scale with your INT modifier (e.g., Defend grants INT-mod AC instead of +2). Tactical Forecast now generates <strong>3d20</strong> Forecast rolls.
-    </div>
-  </div>
-
-  <div class="class-feature" data-min-level="11">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 11</span>
-      <span class="feature-name">Rapid Coordination</span>
-    </div>
-    <div class="class-feature-body">
-      You can now issue Combat Protocols as a free action (no bonus action cost) once per turn. The first Protocol each turn costs 0 CP.
-    </div>
-  </div>
-
-  <div class="class-feature" data-min-level="13">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 13</span>
-      <span class="feature-name">Total Command</span>
-    </div>
-    <div class="class-feature-body">
-      Spend <strong>3 CP</strong> as an action to issue a Total Command order. All allies within 60 ft who can hear you may immediately take a reaction to move up to their speed and make one attack, all without using their actual reaction.
-    </div>
-  </div>
-
-  <div class="class-feature" data-min-level="17">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 17</span>
-      <span class="feature-name">Command Mastery</span>
-    </div>
-    <div class="class-feature-body">
-      Your CP maximum increases by your INT modifier. All allies within 60 ft gain a bonus to their attack rolls equal to half your INT modifier (rounded down) while you are conscious.
-    </div>
-  </div>
-
-  <div class="class-feature" data-min-level="18">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 18</span>
-      <span class="feature-name">Master Strategist</span>
-    </div>
-    <div class="class-feature-body">
-      You generate Tactical Forecast rolls at the start of every round (not just the start of combat). You may hold up to 5 Forecast results at a time.
-    </div>
-  </div>
-
-  <div class="class-feature" data-min-level="20">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 20</span>
-      <span class="feature-name">Supreme Commander</span>
-    </div>
-    <div class="class-feature-body">
-      All Combat Protocols cost 0 CP. Your CP pool refreshes fully at the start of each round of combat. Allies within 60 ft cannot be surprised and have advantage on all saving throws while you are conscious and not incapacitated.
-    </div>
-  </div>
 </div>
 
 <!-- ══════════════════════════════════════════
      CLASS — KINETICIST
 ══════════════════════════════════════════ -->
 <div class="section-page" id="tab-class-kineticist">
-  <div class="sec-heading">Kineticist — Class Features</div>
-  <p style="font-size:11px;color:var(--muted);margin:0 0 8px">Hit Die: d6 · Saves: WIS &amp; INT · Kinetic Save DC = 8 + PB + WIS mod</p>
+  <div class="sec-heading">Psionic Stats</div>
+  <p style="font-size:10px;color:var(--muted);margin:-2px 0 8px">d6 HD · WIS &amp; INT saves · Blast: 1d10 (→2d10 L5, →3d10 L11, →4d10 L17)</p>
 
-  <div class="class-feature" data-min-level="1">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 1</span>
-      <span class="feature-name">Kinetic Blast</span>
-    </div>
-    <div class="class-feature-body">
-      Ranged attack (range 60 ft) dealing <strong>1d10 force</strong> damage + WIS modifier. Uses your WIS modifier for the attack roll. Scales with level: 2d10 at 5, 3d10 at 11, 4d10 at 17.
-      <p style="font-size:10px;color:var(--muted);margin:4px 0 0">Current damage die: track with level above.</p>
+  <div class="kinetic-stats">
+    <div class="k-stat"><input type="text" name="kineticdc" placeholder="—"><label>Save DC</label></div>
+    <div class="k-stat"><input type="text" name="blastdamage" placeholder="1d10"><label>Blast Damage</label></div>
+    <div class="k-stat"><input type="text" name="elementalaffinity" placeholder="—"><label>Element</label></div>
+  </div>
+
+  <div class="sec-heading">Ability Uses</div>
+
+  <div class="uses-grid" style="grid-template-columns:1fr">
+    <div class="uses-card">
+      <label>Kinetic Shielding</label>
+      <div class="bubbles">
+        <input type="checkbox" name="kin-ks1"><input type="checkbox" name="kin-ks2">
+        <input type="checkbox" name="kin-ks3"><input type="checkbox" name="kin-ks4">
+        <input type="checkbox" name="kin-ks5"><input type="checkbox" name="kin-ks6">
+      </div>
+      <div class="uses-note">/ long rest = prof bonus · reaction: reduce incoming dmg by 1d10 + WIS mod</div>
     </div>
   </div>
 
-  <div class="class-feature" data-min-level="1">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 1</span>
-      <span class="feature-name">Kinetic Shielding &amp; Psionic Control</span>
-    </div>
-    <div class="class-feature-body">
-      <strong>Kinetic Shielding</strong> — as a reaction when hit, reduce the damage by 1d10 + WIS modifier. Usable PB times per long rest.<br>
-      <strong>Psionic Control</strong> — you can manipulate unattended objects weighing up to 10 lbs within 30 ft as a bonus action (no attack roll required).
+  <div class="kinetic-stats" data-min-level="3" style="grid-template-columns:1fr">
+    <div class="k-stat"><input type="text" name="kin-specialization" placeholder="—"><label>Specialization</label></div>
+  </div>
+  <div class="class-note" data-min-level="3">Specialization: <strong>Elemental Channeler · Force Adept · Battlefield Shaper</strong></div>
+
+  <div class="class-note" data-min-level="6"><strong>Environmental Surge (L6)</strong> — near your element, each blast die deals +2 damage</div>
+  <div class="class-note" data-min-level="9"><strong>Telekinetic Grasp (L9)</strong> — action: STR save or grappled+restrained; maintain as bonus action (Conc.)</div>
+  <div class="class-note" data-min-level="10"><strong>Elemental Infusion (L10)</strong> — immunity to your element; on blast hit impose secondary effect</div>
+  <div class="class-note" data-min-level="13"><strong>Environmental Mastery (L13)</strong> — bonus action: 20-ft elemental zone, 1 min (Conc.); enemies take 2d6 on entry</div>
+
+  <div class="uses-grid" data-min-level="11" style="grid-template-columns:1fr">
+    <div class="uses-card">
+      <label>Psionic Barrier</label>
+      <div class="bubbles">
+        <input type="checkbox" name="kin-pb1"><input type="checkbox" name="kin-pb2">
+        <input type="checkbox" name="kin-pb3"><input type="checkbox" name="kin-pb4">
+        <input type="checkbox" name="kin-pb5"><input type="checkbox" name="kin-pb6">
+      </div>
+      <div class="uses-note">/ long rest = prof bonus · reaction: reduce dmg to you or ally within 30 ft by 1d10 + WIS</div>
     </div>
   </div>
 
-  <div class="class-feature" data-min-level="2">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 2</span>
-      <span class="feature-name">Elemental Affinity</span>
-    </div>
-    <div class="class-feature-body">
-      Choose a primary element: <em>Fire</em>, <em>Water (Ice)</em>, or <em>Air (Lightning)</em>. Your Kinetic Blast gains +1d6 damage of that element type. You gain resistance to that element's damage type.
-      <div class="feature-input-row"><label>Element</label><input type="text" name="kin-element" placeholder="Fire / Water / Air"></div>
+  <div class="uses-grid" data-min-level="15" style="grid-template-columns:1fr">
+    <div class="uses-card">
+      <label>Force Pulse</label>
+      <div class="bubbles"><input type="checkbox" name="kin-fp1"></div>
+      <div class="uses-note">/ long rest · 30-ft cone: 6d6 force + prone (Save DC = half, no prone)</div>
     </div>
   </div>
 
-  <div class="class-feature" data-min-level="3">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 3</span>
-      <span class="feature-name">Psionic Specialization</span>
-    </div>
-    <div class="class-feature-body">
-      Choose your specialization path: <em>Elemental Channeler</em>, <em>Force Adept</em>, or <em>Battlefield Shaper</em>. Each unlocks unique psionic abilities at levels 3, 7, 11, and 15.
-      <div class="feature-input-row"><label>Specialization</label><input type="text" name="kin-specialization" placeholder="—"></div>
-    </div>
-  </div>
-
-  <div class="class-feature" data-min-level="5">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 5</span>
-      <span class="feature-name">Enhanced Blast</span>
-    </div>
-    <div class="class-feature-body">
-      Kinetic Blast damage increases to <strong>2d10</strong> force (plus the elemental 1d6 from Elemental Affinity).
+  <div class="uses-grid" data-min-level="17" style="grid-template-columns:1fr">
+    <div class="uses-card">
+      <label>Gravity Lens</label>
+      <div class="bubbles">
+        <input type="checkbox" name="kin-gl1"><input type="checkbox" name="kin-gl2">
+        <input type="checkbox" name="kin-gl3"><input type="checkbox" name="kin-gl4">
+        <input type="checkbox" name="kin-gl5"><input type="checkbox" name="kin-gl6">
+      </div>
+      <div class="uses-note">/ long rest = prof bonus · bonus action: designate zone (your blasts have adv, enemies have disadv)</div>
     </div>
   </div>
 
-  <div class="class-feature" data-min-level="6">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 6</span>
-      <span class="feature-name">Environmental Surge</span>
-    </div>
-    <div class="class-feature-body">
-      While within 30 ft of a source of your chosen element (open flame, body of water, storm, etc.), each damage die of your Kinetic Blast deals +2 additional damage.
-    </div>
-  </div>
+  <div class="class-note" data-min-level="20"><strong>Psionic Ascendance (L20)</strong> — Shielding recharges each turn; Force Pulse recharges on short rest; blast ignores resistance, range 120 ft</div>
 
-  <div class="class-feature" data-min-level="9">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 9</span>
-      <span class="feature-name">Telekinetic Grasp</span>
-    </div>
-    <div class="class-feature-body">
-      As an action, target one creature within 60 ft. The creature makes a STR saving throw (DC = 8 + PB + WIS). On a failure, it is <em>grappled</em> and <em>restrained</em> until the start of your next turn. You can maintain this as a bonus action each turn (Concentration).
-    </div>
-  </div>
-
-  <div class="class-feature" data-min-level="10">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 10</span>
-      <span class="feature-name">Elemental Infusion</span>
-    </div>
-    <div class="class-feature-body">
-      You gain immunity (instead of resistance) to your chosen element's damage type. Additionally, once per turn when you hit with Kinetic Blast, you can impose a secondary effect based on your element:<br>
-      <em>Fire</em> — target is set ablaze (1d6 fire, start of their turn, until extinguished).<br>
-      <em>Water/Ice</em> — target's speed is halved until end of their next turn.<br>
-      <em>Air/Lightning</em> — target cannot use reactions until end of their next turn.
-    </div>
-  </div>
-
-  <div class="class-feature" data-min-level="11">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 11</span>
-      <span class="feature-name">Psionic Barrier &amp; Enhanced Blast (3)</span>
-    </div>
-    <div class="class-feature-body">
-      <strong>Psionic Barrier</strong> — as a reaction when you or an ally within 30 ft is hit, you can create a barrier that reduces the damage by 1d10 + WIS modifier. Usable PB times per long rest.<br>
-      <strong>Enhanced Blast</strong> — Kinetic Blast damage increases to <strong>3d10</strong>.
-    </div>
-  </div>
-
-  <div class="class-feature" data-min-level="13">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 13</span>
-      <span class="feature-name">Environmental Mastery</span>
-    </div>
-    <div class="class-feature-body">
-      You can create a 20-ft radius environmental zone of your element (bonus action, Concentration, 1 minute). Within this zone, allies treat the element as if always present for Environmental Surge. Enemies entering or starting their turn in the zone take 2d6 elemental damage (Kinetic Save DC halves).
-    </div>
-  </div>
-
-  <div class="class-feature" data-min-level="15">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 15</span>
-      <span class="feature-name">Force Pulse</span>
-    </div>
-    <div class="class-feature-body">
-      As an action, unleash a devastating 30-ft cone of psionic force. All creatures in the area take <strong>6d6 force</strong> damage and are knocked prone (Kinetic Save DC for half and no knock prone). Usable once per long rest, or spend 4 Kinetic Shielding uses to use again.
-    </div>
-  </div>
-
-  <div class="class-feature" data-min-level="17">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 17</span>
-      <span class="feature-name">Gravity Lens &amp; Enhanced Blast (4)</span>
-    </div>
-    <div class="class-feature-body">
-      <strong>Gravity Lens</strong> — as a bonus action, designate a point within 60 ft. Until the start of your next turn, all ranged attack rolls targeting creatures within 10 ft of that point have disadvantage, and all your Kinetic Blast attacks against creatures in that area have advantage.<br>
-      <strong>Enhanced Blast</strong> — Kinetic Blast damage increases to <strong>4d10</strong>.
-    </div>
-  </div>
-
-  <div class="class-feature" data-min-level="20">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 20</span>
-      <span class="feature-name">Psionic Ascendance</span>
-    </div>
-    <div class="class-feature-body">
-      Your psionic power reaches its apex. Kinetic Shielding recharges at the start of each of your turns (you always have uses available). Force Pulse recharges on a short or long rest. Your Kinetic Blast ignores resistance to force and elemental damage, and the range extends to 120 ft.
-    </div>
-  </div>
+  <div class="sec-heading">Notes</div>
+  <textarea name="kin-notes" style="height:80px;width:100%;box-sizing:border-box" placeholder="Specialization abilities, elemental effects, etc."></textarea>
 </div>
 
 <!-- ══════════════════════════════════════════
      CLASS — SPECIALIST
 ══════════════════════════════════════════ -->
 <div class="section-page" id="tab-class-specialist">
-  <div class="sec-heading">Specialist — Class Features</div>
-  <p style="font-size:11px;color:var(--muted);margin:0 0 8px">Hit Die: d8 · Saves: DEX &amp; INT · Precision Strike scales with level</p>
+  <div class="sec-heading">Precision Strike</div>
+  <p style="font-size:10px;color:var(--muted);margin:-2px 0 8px">d8 HD · DEX &amp; INT saves · once per turn when you have adv or ally is adjacent</p>
 
-  <div class="class-feature" data-min-level="1">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 1</span>
-      <span class="feature-name">Precision Strike</span>
+  <div class="kinetic-stats">
+    <div class="k-stat">
+      <input type="text" id="precisionStrikeDisplay" placeholder="—" readonly style="color:var(--accent);cursor:default">
+      <label>Precision Strike</label>
     </div>
-    <div class="class-feature-body">
-      Once per turn when you hit a creature with a weapon attack and you have advantage on the roll (or an ally is adjacent to the target), deal extra damage:<br>
-      <strong>+1d6</strong> at L1 · <strong>+2d6</strong> at L5 · <strong>+3d6</strong> at L9 · <strong>+4d6</strong> at L13 · <strong>+5d6</strong> at L17
+    <div class="k-stat" style="grid-column:span 2">
+      <input type="text" name="spec-specialization" placeholder="—">
+      <label>Specialization</label>
+    </div>
+  </div>
+  <div class="class-note" data-min-level="3">Specialization (L3): <strong>Infiltrator · Saboteur · Marksman</strong></div>
+
+  <div class="sec-heading">Passive Features</div>
+  <div class="class-note"><strong>Tactical Stealth</strong> — hide as bonus action even lightly obscured · adv vs targets that haven't acted</div>
+  <div class="class-note"><strong>Close Quarters Training</strong> — no disadv on ranged attacks within 5 ft</div>
+  <div class="class-note" data-min-level="2"><strong>Ghost Step (L2)</strong> — bonus action: Dash, Disengage, or Hide (if Hide, attacks have disadv until you attack)</div>
+  <div class="class-note" data-min-level="5"><strong>Deadly Accuracy (L5)</strong> — with adv, treat a 9 or lower as 10 on either die</div>
+  <div class="class-note" data-min-level="7"><strong>Slip Reflexes (L7)</strong> — reaction when missed by melee: move ½ speed without provoking OAs</div>
+  <div class="class-note" data-min-level="9"><strong>Shadow Operative (L9)</strong> — move through creature spaces; silent while hidden</div>
+  <div class="class-note" data-min-level="11"><strong>Double Tap (L11)</strong> — after a Precision Strike, make one additional attack as a bonus action</div>
+  <div class="class-note" data-min-level="13"><strong>Weak Point Exploit (L13)</strong> — Precision Strike dice become d8 vs surprised/restrained/grappled/flat-footed</div>
+  <div class="class-note" data-min-level="18"><strong>Elusive Killer (L18)</strong> — no attack roll has adv against you; Hide as free action once/turn</div>
+  <div class="class-note" data-min-level="20"><strong>Perfect Killer (L20)</strong> — Precision Strike on every attack; Execution Protocol recharges on short rest</div>
+
+  <div class="sec-heading">Expert Skills</div>
+  <div class="kinetic-stats" data-min-level="6" style="grid-template-columns:1fr">
+    <div class="k-stat"><input type="text" name="spec-expert-skills" placeholder="—"><label>Field Mastery Expertise</label></div>
+  </div>
+
+  <div class="sec-heading">Ability Uses</div>
+  <div class="uses-grid" data-min-level="15" style="grid-template-columns:1fr">
+    <div class="uses-card">
+      <label>Execution Protocol</label>
+      <div class="bubbles"><input type="checkbox" name="spec-ep1"></div>
+      <div class="uses-note">/ long rest · action vs surprised/unaware/below-half-HP — CON save or 0 HP</div>
+    </div>
+  </div>
+  <div class="uses-grid" data-min-level="17" style="grid-template-columns:1fr">
+    <div class="uses-card">
+      <label>Phase Ghost</label>
+      <div class="bubbles">
+        <input type="checkbox" name="spec-pg1"><input type="checkbox" name="spec-pg2">
+        <input type="checkbox" name="spec-pg3"><input type="checkbox" name="spec-pg4">
+        <input type="checkbox" name="spec-pg5"><input type="checkbox" name="spec-pg6">
+      </div>
+      <div class="uses-note">/ long rest = prof bonus · reaction: incorporeal until end of turn (resistance all dmg, pass through objects)</div>
     </div>
   </div>
 
-  <div class="class-feature" data-min-level="1">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 1</span>
-      <span class="feature-name">Tactical Stealth &amp; Close Quarters Training</span>
-    </div>
-    <div class="class-feature-body">
-      <strong>Tactical Stealth</strong> — proficiency in Stealth. You can attempt to hide as a bonus action even when only lightly obscured.<br>
-      <strong>Close Quarters Training</strong> — you do not suffer disadvantage when making ranged attacks against targets within 5 ft. You have advantage on attack rolls against targets that have not yet acted in combat.
-    </div>
-  </div>
+  <div class="sec-heading">Notes</div>
+  <textarea name="spec-notes" style="height:80px;width:100%;box-sizing:border-box" placeholder="Specialization abilities, targets analyzed, etc."></textarea>
 
-  <div class="class-feature" data-min-level="2">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 2</span>
-      <span class="feature-name">Ghost Step</span>
-    </div>
-    <div class="class-feature-body">
-      As a bonus action, choose one: Dash, Disengage, or Hide. If you Hide, attacks against you have disadvantage until the start of your next turn or until you attack.
-    </div>
-  </div>
-
-  <div class="class-feature" data-min-level="3">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 3</span>
-      <span class="feature-name">Specialization</span>
-    </div>
-    <div class="class-feature-body">
-      Choose your Specialization: <em>Infiltrator</em>, <em>Saboteur</em>, or <em>Marksman</em>. Each path unlocks unique abilities at levels 3, 9, 13, and 17.
-      <div class="feature-input-row"><label>Specialization</label><input type="text" name="spec-specialization" placeholder="—"></div>
-    </div>
-  </div>
-
-  <div class="class-feature" data-min-level="5">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 5</span>
-      <span class="feature-name">Deadly Accuracy &amp; Precision Strike +2d6</span>
-    </div>
-    <div class="class-feature-body">
-      <strong>Deadly Accuracy</strong> — when you make an attack roll with advantage, treat a roll of 9 or lower on either die as a 10 for purposes of determining whether you hit.<br>
-      Precision Strike increases to <strong>+2d6</strong>.
-    </div>
-  </div>
-
-  <div class="class-feature" data-min-level="6">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 6</span>
-      <span class="feature-name">Field Mastery</span>
-    </div>
-    <div class="class-feature-body">
-      Choose two skills in which you already have proficiency — your proficiency bonus is doubled for checks using those skills (expertise).
-      <div class="feature-input-row"><label>Expert Skills</label><input type="text" name="spec-expert-skills" placeholder="—"></div>
-    </div>
-  </div>
-
-  <div class="class-feature" data-min-level="7">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 7</span>
-      <span class="feature-name">Slip Reflexes</span>
-    </div>
-    <div class="class-feature-body">
-      When a creature misses you with a melee attack, you can use your reaction to move up to half your speed without provoking opportunity attacks.
-    </div>
-  </div>
-
-  <div class="class-feature" data-min-level="9">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 9</span>
-      <span class="feature-name">Shadow Operative &amp; Precision Strike +3d6</span>
-    </div>
-    <div class="class-feature-body">
-      <strong>Shadow Operative</strong> — you can move through the space of any creature without spending extra movement. While hidden, your movement makes no sound.<br>
-      Precision Strike increases to <strong>+3d6</strong>.
-    </div>
-  </div>
-
-  <div class="class-feature" data-min-level="11">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 11</span>
-      <span class="feature-name">Double Tap</span>
-    </div>
-    <div class="class-feature-body">
-      When you make a Precision Strike, you can immediately make one additional weapon attack against the same target as a bonus action (no action cost beyond the bonus action). This additional attack does not benefit from Precision Strike.
-    </div>
-  </div>
-
-  <div class="class-feature" data-min-level="13">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 13</span>
-      <span class="feature-name">Weak Point Exploit &amp; Precision Strike +4d6</span>
-    </div>
-    <div class="class-feature-body">
-      <strong>Weak Point Exploit</strong> — your Precision Strike dice increase from d6 to <strong>d8</strong> against targets that are surprised, restrained, grappled, or have not yet acted in combat.<br>
-      Precision Strike increases to <strong>+4d6</strong> (or +4d8 against weak-point targets).
-    </div>
-  </div>
-
-  <div class="class-feature" data-min-level="15">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 15</span>
-      <span class="feature-name">Execution Protocol</span>
-    </div>
-    <div class="class-feature-body">
-      Once per long rest, as an action, make a single attack against a creature that is surprised, unaware of you, or below half HP. On a hit, the creature must succeed on a CON saving throw (DC = 8 + PB + DEX mod) or be reduced to 0 HP. Creatures immune to critical hits are unaffected.
-    </div>
-  </div>
-
-  <div class="class-feature" data-min-level="17">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 17</span>
-      <span class="feature-name">Phase Ghost &amp; Precision Strike +5d6</span>
-    </div>
-    <div class="class-feature-body">
-      <strong>Phase Ghost</strong> — once per turn when you would take damage, you can use your reaction to become incorporeal until the end of your turn. You gain resistance to all damage and can move through solid objects (ending inside one deals 5 force damage). Usable PB times per long rest.<br>
-      Precision Strike increases to <strong>+5d6</strong> (or +5d8 against weak-point targets).
-    </div>
-  </div>
-
-  <div class="class-feature" data-min-level="18">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 18</span>
-      <span class="feature-name">Elusive Killer</span>
-    </div>
-    <div class="class-feature-body">
-      No attack roll has advantage against you while you are not incapacitated. You can Hide as a free action (not a bonus action) once per turn.
-    </div>
-  </div>
-
-  <div class="class-feature" data-min-level="20">
-    <div class="class-feature-header">
-      <span class="feature-level-badge">LVL 20</span>
-      <span class="feature-name">Perfect Killer</span>
-    </div>
-    <div class="class-feature-body">
-      Your Precision Strike applies to every attack on your turn (not just once per turn). Execution Protocol recharges on a short or long rest. You always act in the surprise round regardless of how combat begins.
-    </div>
-  </div>
 </div>
 
 <!-- Save bar -->
@@ -2055,10 +1624,12 @@ function syncClassTabs() {
     const checkbox = document.querySelector(`input[name="class-${c}"]`);
     const classBtn = document.querySelector(`.class-btn[data-class="${c}"]`);
     const tabBtn = document.querySelector(`.tab-btn[data-class="${c}"]`);
+    const levelRow = document.querySelector(`.class-level-row[data-class="${c}"]`);
     if (!checkbox) return;
     const on = checkbox.checked;
     if (classBtn) classBtn.classList.toggle('active', on);
     if (tabBtn) tabBtn.style.display = on ? '' : 'none';
+    if (levelRow) levelRow.style.display = on ? '' : 'none';
     // If tab becomes hidden while active, fall back to identity
     if (!on && tabBtn && tabBtn.classList.contains('active')) {
       tabBtn.classList.remove('active');
@@ -2081,16 +1652,30 @@ document.getElementById('classPicker').addEventListener('click', e => {
 
 // ── LEVEL GATING ─────────────────────────────────────────
 function updateLevelFeatures() {
-  const level = parseInt(document.getElementById('levelInput').value) || 0;
-  document.querySelectorAll('.class-feature[data-min-level]').forEach(el => {
-    const min = parseInt(el.dataset.minLevel) || 1;
-    el.style.display = level >= min ? '' : 'none';
+  CLASSES.forEach(c => {
+    const level = parseInt(document.querySelector(`input[name="class-level-${c}"]`)?.value) || 0;
+    const tabEl = document.getElementById('tab-class-' + c);
+    if (!tabEl) return;
+    tabEl.querySelectorAll('[data-min-level]').forEach(el => {
+      const min = parseInt(el.dataset.minLevel) || 1;
+      el.style.display = level >= min ? '' : 'none';
+    });
   });
+  // Auto-compute Precision Strike for Specialist
+  const psEl = document.getElementById('precisionStrikeDisplay');
+  if (psEl) {
+    const level = parseInt(document.querySelector('input[name="class-level-specialist"]')?.value) || 0;
+    const tiers = [[17,'+5d6'],[13,'+4d6'],[9,'+3d6'],[5,'+2d6'],[1,'+1d6']];
+    const tier = tiers.find(t => level >= t[0]);
+    psEl.value = tier ? tier[1] : '—';
+  }
 }
 
-document.getElementById('levelInput').addEventListener('input', () => {
-  updateLevelFeatures();
-  markDirty();
+document.getElementById('classLevels').addEventListener('input', e => {
+  if (e.target.matches('input[type="number"]')) {
+    updateLevelFeatures();
+    markDirty();
+  }
 });
 
 nameInput.addEventListener('input', () => {
