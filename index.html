@@ -847,6 +847,12 @@ html, body { padding-bottom: 48px; }
   transition: background 0.15s;
 }
 .save-btn:active { background: var(--accent-dim); }
+.save-btn.secondary {
+  color: var(--text-dim);
+  background: transparent;
+  border-color: var(--border-bright);
+}
+.save-btn.secondary:hover { color: var(--text); border-color: var(--text-dim); background: var(--bg3); }
 .save-btn.danger {
   color: var(--danger);
   background: rgba(224,92,92,0.08);
@@ -2864,6 +2870,9 @@ input[type="number"]:focus { color: #fff; }
   <button class="save-btn" id="saveBtn">Save URL</button>
   <button class="save-btn danger" id="clearBtn">Clear</button>
   <span class="save-status" id="saveStatus">No saved data</span>
+  <button class="save-btn secondary" id="exportBtn">Export JSON</button>
+  <button class="save-btn secondary" id="importBtn">Import JSON</button>
+  <input type="file" id="importFile" accept=".json,application/json" style="display:none">
 </div>
 
 <!-- Toast -->
@@ -3227,6 +3236,45 @@ document.getElementById('clearBtn').addEventListener('click', () => {
   statusEl.className = 'save-status';
   statusEl.textContent = 'Sheet cleared';
   showToast('Sheet cleared');
+});
+
+// ── EXPORT JSON ───────────────────────────────────────────
+document.getElementById('exportBtn').addEventListener('click', () => {
+  const data = collectData();
+  const json = JSON.stringify(data, null, 2);
+  const name = (data.charname || 'character').toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+  const blob = new Blob([json], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = (name || 'character') + '.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('JSON downloaded', 'ok');
+});
+
+// ── IMPORT JSON ───────────────────────────────────────────
+document.getElementById('importBtn').addEventListener('click', () => {
+  document.getElementById('importFile').click();
+});
+
+document.getElementById('importFile').addEventListener('change', e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      const data = JSON.parse(ev.target.result);
+      applyData(data);
+      markLoaded();
+      showToast('Sheet imported', 'ok');
+    } catch {
+      showToast('Invalid JSON file', 'err');
+    }
+    // Reset so the same file can be re-imported if needed
+    e.target.value = '';
+  };
+  reader.readAsText(file);
 });
 
 // ── LOAD ON OPEN ──────────────────────────────────────────
