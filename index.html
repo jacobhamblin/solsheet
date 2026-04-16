@@ -882,6 +882,19 @@ input[type="number"]:focus { color: #fff; }
 .feature-uses .bubbles { margin: 0; }
 .feature-uses .uses-note { font-family: var(--mono); font-size: 9px; color: var(--text-dim); }
 
+/* Specialization section (identity tab) */
+.spec-class-row { margin-bottom: 6px; }
+.spec-class-row:last-of-type { margin-bottom: 0; }
+.spec-class-label {
+  display: block;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 4px;
+}
+
 /* Subclass picker */
 .subclass-picker {
   display: flex;
@@ -1013,8 +1026,47 @@ input[type="number"]:focus { color: #fff; }
         </div>
         <label>Class</label>
       </div>
-      <div class="field">
-        <input type="text" name="specialization">
+      <div class="field" id="specializationSection" style="display:none; grid-column: 1 / -1">
+        <div id="spec-row-marine" style="display:none" class="spec-class-row">
+          <span class="spec-class-label">Marine</span>
+          <div class="subclass-picker">
+            <button type="button" class="subclass-btn" data-class="marine" data-subclass="demolitionist">Demolitionist</button>
+            <button type="button" class="subclass-btn" data-class="marine" data-subclass="sniper">Sniper</button>
+            <button type="button" class="subclass-btn" data-class="marine" data-subclass="heavy-gunner">Heavy Gunner</button>
+          </div>
+        </div>
+        <div id="spec-row-engineer" style="display:none" class="spec-class-row">
+          <span class="spec-class-label">Engineer</span>
+          <div class="subclass-picker">
+            <button type="button" class="subclass-btn" data-class="engineer" data-subclass="mechanist">Mechanist</button>
+            <button type="button" class="subclass-btn" data-class="engineer" data-subclass="systems-navigator">Systems Navigator</button>
+            <button type="button" class="subclass-btn" data-class="engineer" data-subclass="technical-savant">Technical Savant</button>
+          </div>
+        </div>
+        <div id="spec-row-operator" style="display:none" class="spec-class-row">
+          <span class="spec-class-label">Operator</span>
+          <div class="subclass-picker">
+            <button type="button" class="subclass-btn" data-class="operator" data-subclass="tactical-commander">Tactical Commander</button>
+            <button type="button" class="subclass-btn" data-class="operator" data-subclass="defensive-coordinator">Defensive Coordinator</button>
+            <button type="button" class="subclass-btn" data-class="operator" data-subclass="strategic-controller">Strategic Controller</button>
+          </div>
+        </div>
+        <div id="spec-row-kineticist" style="display:none" class="spec-class-row">
+          <span class="spec-class-label">Kineticist</span>
+          <div class="subclass-picker">
+            <button type="button" class="subclass-btn" data-class="kineticist" data-subclass="elemental-channeler">Elemental Channeler</button>
+            <button type="button" class="subclass-btn" data-class="kineticist" data-subclass="force-adept">Force Adept</button>
+            <button type="button" class="subclass-btn" data-class="kineticist" data-subclass="battlefield-shaper">Battlefield Shaper</button>
+          </div>
+        </div>
+        <div id="spec-row-specialist" style="display:none" class="spec-class-row">
+          <span class="spec-class-label">Specialist</span>
+          <div class="subclass-picker">
+            <button type="button" class="subclass-btn" data-class="specialist" data-subclass="infiltrator">Infiltrator</button>
+            <button type="button" class="subclass-btn" data-class="specialist" data-subclass="saboteur">Saboteur</button>
+            <button type="button" class="subclass-btn" data-class="specialist" data-subclass="marksman">Marksman</button>
+          </div>
+        </div>
         <label>Specialization</label>
       </div>
       <div class="field">
@@ -2609,6 +2661,7 @@ document.getElementById('classPicker').addEventListener('click', e => {
   const checkbox = document.querySelector(`input[name="class-${cls}"]`);
   checkbox.checked = !checkbox.checked;
   syncClassTabs();
+  updateLevelFeatures();
   markDirty();
 });
 
@@ -2641,11 +2694,29 @@ function updateLevelFeatures() {
       el.style.display = (levelOk && subclassOk) ? '' : 'none';
     });
 
-    // Sync subclass picker button highlights
-    tabEl.querySelectorAll('.subclass-btn').forEach(btn => {
+    // Sync subclass picker button highlights (class tab + identity tab)
+    document.querySelectorAll(`.subclass-btn[data-class="${c}"]`).forEach(btn => {
       btn.classList.toggle('active', btn.dataset.subclass === selectedSubclass);
     });
+
+    // Show/hide this class's row in the identity specialization section
+    const specRow = document.getElementById('spec-row-' + c);
+    if (specRow) {
+      const classActive = document.querySelector(`input[name="class-${c}"]`)?.checked;
+      specRow.style.display = (classActive && level >= 3) ? '' : 'none';
+    }
   });
+
+  // Show/hide the whole specialization section
+  const specSection = document.getElementById('specializationSection');
+  if (specSection) {
+    const anyVisible = CLASSES.some(c => {
+      const level = parseInt(document.querySelector(`input[name="class-level-${c}"]`)?.value) || 0;
+      const active = document.querySelector(`input[name="class-${c}"]`)?.checked;
+      return active && level >= 3;
+    });
+    specSection.style.display = anyVisible ? '' : 'none';
+  }
 
   // Auto-compute Precision Strike for Specialist
   const psEl = document.getElementById('precisionStrikeDisplay');
