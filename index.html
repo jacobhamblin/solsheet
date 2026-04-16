@@ -28,24 +28,137 @@
   --radius-lg: 8px;
   --gap: 10px;
   --nav-h: 52px;
+  --scanline: rgba(0,0,0,0.06);
+  --glow-strength: 1;
 }
 
 /* ── THEMES ── */
-[data-theme="demolitionist"]   { --accent:#e8722a; --accent-dim:#7a3010; --accent-faint:#1e1008; --bg2:#181210; --bg3:#201610; --border:#38200e; --border-bright:#503018; }
-[data-theme="sniper"]          { --accent:#5b9bd5; --accent-dim:#2a4870; --accent-faint:#0e1820; --bg2:#101418; --bg3:#161c24; --border:#283040; --border-bright:#384858; }
-[data-theme="heavy-gunner"]    { --accent:#c09040; --accent-dim:#604810; --accent-faint:#1c1808; --bg2:#161410; --bg3:#1e1c12; --border:#383018; --border-bright:#504828; }
-[data-theme="mechanist"]       { --accent:#d47830; --accent-dim:#703a10; --accent-faint:#1e1008; --bg2:#181210; --bg3:#201610; --border:#382010; --border-bright:#503018; }
-[data-theme="systems-navigator"]  { --accent:#28c8e8; --accent-dim:#107888; --accent-faint:#081e28; --bg2:#0e1618; --bg3:#121e28; --border:#183040; --border-bright:#285060; }
-[data-theme="technical-savant"]   { --accent:#9070e0; --accent-dim:#482890; --accent-faint:#140e28; --bg2:#121018; --bg3:#181428; --border:#282040; --border-bright:#403858; }
-[data-theme="tactical-commander"] { --accent:#c8a028; --accent-dim:#604c08; --accent-faint:#1c1808; --bg2:#161408; --bg3:#1e1c10; --border:#383018; --border-bright:#504828; }
-[data-theme="defensive-coordinator"] { --accent:#40b870; --accent-dim:#186038; --accent-faint:#081c10; --bg2:#0e1610; --bg3:#121e18; --border:#183028; --border-bright:#285040; }
-[data-theme="strategic-controller"]  { --accent:#9040e0; --accent-dim:#482090; --accent-faint:#140820; --bg2:#121018; --bg3:#181428; --border:#282840; --border-bright:#403858; }
-[data-theme="elemental-channeler"]   { --accent:#e05828; --accent-dim:#701808; --accent-faint:#200808; --bg2:#181010; --bg3:#201414; --border:#381818; --border-bright:#502020; }
-[data-theme="force-adept"]     { --accent:#4870e8; --accent-dim:#1c3090; --accent-faint:#0c1028; --bg2:#101218; --bg3:#141828; --border:#202840; --border-bright:#304060; }
-[data-theme="battlefield-shaper"] { --accent:#c030b8; --accent-dim:#601060; --accent-faint:#1c0820; --bg2:#141018; --bg3:#1c1428; --border:#301828; --border-bright:#483040; }
-[data-theme="infiltrator"]     { --accent:#30c060; --accent-dim:#107030; --accent-faint:#081a0e; --bg2:#0e1410; --bg3:#121c16; --border:#183020; --border-bright:#285038; }
-[data-theme="saboteur"]        { --accent:#d4bc28; --accent-dim:#685c08; --accent-faint:#1c1a08; --bg2:#161408; --bg3:#1e1c10; --border:#383018; --border-bright:#504828; }
-[data-theme="marksman"]        { --accent:#c07020; --accent-dim:#602c08; --accent-faint:#1c1008; --bg2:#181210; --bg3:#201610; --border:#381808; --border-bright:#503018; }
+
+/* — Marine — */
+[data-theme="demolitionist"] {
+  --accent:#e8722a; --accent-dim:#7a3010; --accent-faint:#1e1008;
+  --bg2:#181210; --bg3:#201610; --border:#38200e; --border-bright:#503018;
+  --radius:0px; --radius-lg:2px;
+  --mono:'Courier New',Courier,monospace;
+  --glow-strength:0.6;
+}
+[data-theme="sniper"] {
+  --accent:#3a6ea8; --accent-dim:#1c4878; --accent-faint:#d8e8f4;
+  --bg:#f2f4f6; --bg2:#e6eaef; --bg3:#d8dde6; --bg4:#cacfd8;
+  --border:#b0b8c8; --border-bright:#8a96aa;
+  --text:#1a1e28; --text-dim:#4a5264; --text-faint:#8890a4;
+  --mono:ui-monospace,Menlo,Consolas,monospace;
+  --scanline:rgba(0,0,0,0.05);
+  --glow-strength:0.5;
+}
+[data-theme="heavy-gunner"] {
+  --accent:#c09040; --accent-dim:#604810; --accent-faint:#1c1808;
+  --bg2:#161410; --bg3:#1e1c12; --border:#383018; --border-bright:#504828;
+  --radius:0px; --radius-lg:2px;
+  --mono:'Courier New',Courier,monospace;
+  --glow-strength:0.6;
+}
+
+/* — Engineer — */
+[data-theme="mechanist"] {
+  --accent:#a85810; --accent-dim:#703808; --accent-faint:#f0d8b0;
+  --bg:#f0ece4; --bg2:#e4ddd0; --bg3:#d8d0c0; --bg4:#ccc2ae;
+  --border:#b0a488; --border-bright:#988c70;
+  --text:#1a1610; --text-dim:#463c28; --text-faint:#847a60;
+  --radius:0px; --radius-lg:2px;
+  --mono:'Courier New',Courier,monospace;
+  --scanline:rgba(0,0,0,0.05);
+  --glow-strength:0.6;
+}
+[data-theme="systems-navigator"] {
+  --accent:#28c8e8; --accent-dim:#107888; --accent-faint:#081e28;
+  --bg2:#0e1618; --bg3:#121e28; --border:#183040; --border-bright:#285060;
+  --radius:6px; --radius-lg:14px;
+  --mono:ui-monospace,Menlo,Consolas,monospace;
+  --glow-strength:1.4;
+}
+[data-theme="technical-savant"] {
+  --accent:#5848b8; --accent-dim:#3828a0; --accent-faint:#dcd8f4;
+  --bg:#e8f0f8; --bg2:#dce8f4; --bg3:#ccd8ec; --bg4:#bccce0;
+  --border:#9ab0cc; --border-bright:#7a94b8;
+  --text:#101828; --text-dim:#384868; --text-faint:#788898;
+  --radius:6px; --radius-lg:14px;
+  --mono:ui-monospace,Menlo,Consolas,monospace;
+  --scanline:rgba(0,0,0,0.05);
+  --glow-strength:0.7;
+}
+
+/* — Operator — */
+[data-theme="tactical-commander"] {
+  --accent:#a07810; --accent-dim:#785408; --accent-faint:#f0e4b0;
+  --bg:#f0ead8; --bg2:#e4dcc8; --bg3:#d8cfb8; --bg4:#ccc2a8;
+  --border:#b0a07a; --border-bright:#988860;
+  --text:#1c1808; --text-dim:#4a4028; --text-faint:#8a7e58;
+  --radius:0px; --radius-lg:2px;
+  --mono:'Courier New',Courier,monospace;
+  --scanline:rgba(0,0,0,0.06);
+  --glow-strength:0.5;
+}
+[data-theme="defensive-coordinator"] {
+  --accent:#40b870; --accent-dim:#186038; --accent-faint:#081c10;
+  --bg2:#0e1610; --bg3:#121e18; --border:#183028; --border-bright:#285040;
+  --radius:0px; --radius-lg:2px;
+  --glow-strength:0.7;
+}
+[data-theme="strategic-controller"] {
+  --accent:#9040e0; --accent-dim:#482090; --accent-faint:#140820;
+  --bg2:#121018; --bg3:#181428; --border:#282840; --border-bright:#403858;
+  --mono:ui-monospace,Menlo,Consolas,monospace;
+  --glow-strength:1.4;
+}
+
+/* — Kineticist — */
+[data-theme="elemental-channeler"] {
+  --accent:#e05828; --accent-dim:#701808; --accent-faint:#200808;
+  --bg2:#181010; --bg3:#201414; --border:#381818; --border-bright:#502020;
+  --glow-strength:2;
+}
+[data-theme="force-adept"] {
+  --accent:#4870e8; --accent-dim:#1c3090; --accent-faint:#0c1028;
+  --bg2:#101218; --bg3:#141828; --border:#202840; --border-bright:#304060;
+  --radius:6px; --radius-lg:14px;
+  --mono:ui-monospace,Menlo,Consolas,monospace;
+  --scanline:rgba(40,0,80,0.08);
+  --glow-strength:2.5;
+}
+[data-theme="battlefield-shaper"] {
+  --accent:#c030b8; --accent-dim:#601060; --accent-faint:#1c0820;
+  --bg2:#141018; --bg3:#1c1428; --border:#301828; --border-bright:#483040;
+  --radius:6px; --radius-lg:14px;
+  --mono:ui-monospace,Menlo,Consolas,monospace;
+  --scanline:rgba(60,0,80,0.08);
+  --glow-strength:2.5;
+}
+
+/* — Specialist — */
+[data-theme="infiltrator"] {
+  --accent:#30c060; --accent-dim:#107030; --accent-faint:#081a0e;
+  --bg2:#0e1410; --bg3:#121c16; --border:#183020; --border-bright:#285038;
+  --mono:ui-monospace,Menlo,Consolas,monospace;
+  --scanline:rgba(0,60,0,0.10);
+  --glow-strength:0.8;
+}
+[data-theme="saboteur"] {
+  --accent:#d4bc28; --accent-dim:#685c08; --accent-faint:#1c1a08;
+  --bg2:#161408; --bg3:#1e1c10; --border:#383018; --border-bright:#504828;
+  --mono:'Courier New',Courier,monospace;
+  --glow-strength:1.2;
+}
+[data-theme="marksman"] {
+  --accent:#985010; --accent-dim:#703008; --accent-faint:#f0dbb0;
+  --bg:#f2ece0; --bg2:#e6dece; --bg3:#d8d0bc; --bg4:#cac2aa;
+  --border:#b0a480; --border-bright:#988c68;
+  --text:#1c180c; --text-dim:#483e20; --text-faint:#887a50;
+  --radius:0px; --radius-lg:2px;
+  --mono:'Courier New',Courier,monospace;
+  --scanline:rgba(0,0,0,0.06);
+  --glow-strength:0.5;
+}
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -62,7 +175,7 @@ body::before {
   content: '';
   position: fixed;
   inset: 0;
-  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.025) 2px, rgba(0,0,0,0.025) 4px);
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, var(--scanline) 2px, var(--scanline) 4px);
   pointer-events: none;
   z-index: 999;
 }
@@ -92,7 +205,7 @@ body::before {
   width: 6px; height: 6px;
   border-radius: 50%;
   background: var(--accent);
-  box-shadow: 0 0 7px var(--accent);
+  box-shadow: 0 0 calc(7px * var(--glow-strength)) var(--accent);
   flex-shrink: 0;
   animation: pulse 2.5s ease-in-out infinite;
 }
@@ -192,7 +305,7 @@ input[type="checkbox"] {
 input[type="checkbox"]:checked {
   background: var(--accent);
   border-color: var(--accent);
-  box-shadow: 0 0 5px var(--accent-dim);
+  box-shadow: 0 0 calc(5px * var(--glow-strength)) var(--accent-dim);
 }
 
 .card {
