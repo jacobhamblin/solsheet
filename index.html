@@ -30,6 +30,23 @@
   --nav-h: 52px;
 }
 
+/* ── THEMES ── */
+[data-theme="demolitionist"]   { --accent:#e8722a; --accent-dim:#7a3010; --accent-faint:#1e1008; --bg2:#181210; --bg3:#201610; --border:#38200e; --border-bright:#503018; }
+[data-theme="sniper"]          { --accent:#5b9bd5; --accent-dim:#2a4870; --accent-faint:#0e1820; --bg2:#101418; --bg3:#161c24; --border:#283040; --border-bright:#384858; }
+[data-theme="heavy-gunner"]    { --accent:#c09040; --accent-dim:#604810; --accent-faint:#1c1808; --bg2:#161410; --bg3:#1e1c12; --border:#383018; --border-bright:#504828; }
+[data-theme="mechanist"]       { --accent:#d47830; --accent-dim:#703a10; --accent-faint:#1e1008; --bg2:#181210; --bg3:#201610; --border:#382010; --border-bright:#503018; }
+[data-theme="systems-navigator"]  { --accent:#28c8e8; --accent-dim:#107888; --accent-faint:#081e28; --bg2:#0e1618; --bg3:#121e28; --border:#183040; --border-bright:#285060; }
+[data-theme="technical-savant"]   { --accent:#9070e0; --accent-dim:#482890; --accent-faint:#140e28; --bg2:#121018; --bg3:#181428; --border:#282040; --border-bright:#403858; }
+[data-theme="tactical-commander"] { --accent:#c8a028; --accent-dim:#604c08; --accent-faint:#1c1808; --bg2:#161408; --bg3:#1e1c10; --border:#383018; --border-bright:#504828; }
+[data-theme="defensive-coordinator"] { --accent:#40b870; --accent-dim:#186038; --accent-faint:#081c10; --bg2:#0e1610; --bg3:#121e18; --border:#183028; --border-bright:#285040; }
+[data-theme="strategic-controller"]  { --accent:#9040e0; --accent-dim:#482090; --accent-faint:#140820; --bg2:#121018; --bg3:#181428; --border:#282840; --border-bright:#403858; }
+[data-theme="elemental-channeler"]   { --accent:#e05828; --accent-dim:#701808; --accent-faint:#200808; --bg2:#181010; --bg3:#201414; --border:#381818; --border-bright:#502020; }
+[data-theme="force-adept"]     { --accent:#4870e8; --accent-dim:#1c3090; --accent-faint:#0c1028; --bg2:#101218; --bg3:#141828; --border:#202840; --border-bright:#304060; }
+[data-theme="battlefield-shaper"] { --accent:#c030b8; --accent-dim:#601060; --accent-faint:#1c0820; --bg2:#141018; --bg3:#1c1428; --border:#301828; --border-bright:#483040; }
+[data-theme="infiltrator"]     { --accent:#30c060; --accent-dim:#107030; --accent-faint:#081a0e; --bg2:#0e1410; --bg3:#121c16; --border:#183020; --border-bright:#285038; }
+[data-theme="saboteur"]        { --accent:#d4bc28; --accent-dim:#685c08; --accent-faint:#1c1a08; --bg2:#161408; --bg3:#1e1c10; --border:#383018; --border-bright:#504828; }
+[data-theme="marksman"]        { --accent:#c07020; --accent-dim:#602c08; --accent-faint:#1c1008; --bg2:#181210; --bg3:#201610; --border:#381808; --border-bright:#503018; }
+
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 html, body {
@@ -922,6 +939,94 @@ input[type="number"]:focus { color: #fff; }
   border-color: var(--accent-dim);
 }
 
+/* ── THEME MENU ── */
+.theme-btn {
+  margin-left: auto;
+  flex-shrink: 0;
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  border: 1px solid var(--border-bright);
+  background: var(--bg3);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-dim);
+  font-size: 14px;
+  transition: border-color 0.15s, color 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.theme-btn:hover, .theme-btn.open { border-color: var(--accent); color: var(--accent); }
+.theme-panel {
+  display: none;
+  position: fixed;
+  top: var(--nav-h);
+  right: 0;
+  width: min(320px, 100vw);
+  background: var(--bg2);
+  border: 1px solid var(--border-bright);
+  border-top: none;
+  border-radius: 0 0 0 var(--radius-lg);
+  z-index: 95;
+  padding: 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  overflow-y: auto;
+  max-height: calc(100vh - var(--nav-h) - 60px);
+}
+.theme-panel.open { display: block; }
+.theme-group-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin: 10px 0 6px;
+}
+.theme-group-label:first-child { margin-top: 0; }
+.theme-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.theme-swatch {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.theme-swatch-dot {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  transition: border-color 0.15s, transform 0.1s;
+  position: relative;
+}
+.theme-swatch:hover .theme-swatch-dot { transform: scale(1.12); }
+.theme-swatch.active .theme-swatch-dot {
+  border-color: #fff;
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.3);
+}
+.theme-swatch.active .theme-swatch-dot::after {
+  content: '✓';
+  position: absolute;
+  inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+  display: grid; place-items: center;
+}
+.theme-swatch-name {
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+  text-align: center;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.theme-swatch.active .theme-swatch-name { color: var(--text); }
+
 /* ── DESKTOP OVERRIDE ── */
 @media (min-width: 700px) {
   .section-page { max-width: 680px; }
@@ -959,6 +1064,45 @@ input[type="number"]:focus { color: #fff; }
   <div class="pulse"></div>
   <span class="game-tag">SOL / BELT</span>
   <div class="charname-display" id="nameDisplay">Character Name</div>
+  <button class="theme-btn" id="themeBtn" title="Color theme" aria-label="Color theme">◈</button>
+</div>
+
+<!-- Theme panel -->
+<div class="theme-panel" id="themePanel">
+  <div class="theme-group-label">Default</div>
+  <div class="theme-swatches">
+    <div class="theme-swatch" data-theme="default"><div class="theme-swatch-dot" style="background:#4fc3c3"></div><span class="theme-swatch-name">Default</span></div>
+  </div>
+  <div class="theme-group-label">Marine</div>
+  <div class="theme-swatches">
+    <div class="theme-swatch" data-theme="demolitionist"><div class="theme-swatch-dot" style="background:#e8722a"></div><span class="theme-swatch-name">Demolit.</span></div>
+    <div class="theme-swatch" data-theme="sniper"><div class="theme-swatch-dot" style="background:#5b9bd5"></div><span class="theme-swatch-name">Sniper</span></div>
+    <div class="theme-swatch" data-theme="heavy-gunner"><div class="theme-swatch-dot" style="background:#c09040"></div><span class="theme-swatch-name">H. Gunner</span></div>
+  </div>
+  <div class="theme-group-label">Engineer</div>
+  <div class="theme-swatches">
+    <div class="theme-swatch" data-theme="mechanist"><div class="theme-swatch-dot" style="background:#d47830"></div><span class="theme-swatch-name">Mechanist</span></div>
+    <div class="theme-swatch" data-theme="systems-navigator"><div class="theme-swatch-dot" style="background:#28c8e8"></div><span class="theme-swatch-name">Sys. Nav.</span></div>
+    <div class="theme-swatch" data-theme="technical-savant"><div class="theme-swatch-dot" style="background:#9070e0"></div><span class="theme-swatch-name">Tech Savant</span></div>
+  </div>
+  <div class="theme-group-label">Operator</div>
+  <div class="theme-swatches">
+    <div class="theme-swatch" data-theme="tactical-commander"><div class="theme-swatch-dot" style="background:#c8a028"></div><span class="theme-swatch-name">Tac. Cmd.</span></div>
+    <div class="theme-swatch" data-theme="defensive-coordinator"><div class="theme-swatch-dot" style="background:#40b870"></div><span class="theme-swatch-name">Def. Coord.</span></div>
+    <div class="theme-swatch" data-theme="strategic-controller"><div class="theme-swatch-dot" style="background:#9040e0"></div><span class="theme-swatch-name">Strat. Ctrl.</span></div>
+  </div>
+  <div class="theme-group-label">Kineticist</div>
+  <div class="theme-swatches">
+    <div class="theme-swatch" data-theme="elemental-channeler"><div class="theme-swatch-dot" style="background:#e05828"></div><span class="theme-swatch-name">Elem. Chan.</span></div>
+    <div class="theme-swatch" data-theme="force-adept"><div class="theme-swatch-dot" style="background:#4870e8"></div><span class="theme-swatch-name">Force Adept</span></div>
+    <div class="theme-swatch" data-theme="battlefield-shaper"><div class="theme-swatch-dot" style="background:#c030b8"></div><span class="theme-swatch-name">B. Shaper</span></div>
+  </div>
+  <div class="theme-group-label">Specialist</div>
+  <div class="theme-swatches">
+    <div class="theme-swatch" data-theme="infiltrator"><div class="theme-swatch-dot" style="background:#30c060"></div><span class="theme-swatch-name">Infiltrator</span></div>
+    <div class="theme-swatch" data-theme="saboteur"><div class="theme-swatch-dot" style="background:#d4bc28"></div><span class="theme-swatch-name">Saboteur</span></div>
+    <div class="theme-swatch" data-theme="marksman"><div class="theme-swatch-dot" style="background:#c07020"></div><span class="theme-swatch-name">Marksman</span></div>
+  </div>
 </div>
 
 <!-- Tab navigation -->
@@ -2728,6 +2872,48 @@ function updateLevelFeatures() {
   }
 }
 
+// ── THEME SYSTEM ──────────────────────────────────────────
+let currentTheme = 'default';
+
+function applyTheme(name) {
+  currentTheme = name;
+  if (name === 'default') {
+    document.documentElement.removeAttribute('data-theme');
+  } else {
+    document.documentElement.dataset.theme = name;
+  }
+  // Sync checkmarks in panel
+  document.querySelectorAll('.theme-swatch').forEach(sw => {
+    sw.classList.toggle('active', sw.dataset.theme === name);
+  });
+}
+
+// Theme menu open/close
+const themeBtn = document.getElementById('themeBtn');
+const themePanel = document.getElementById('themePanel');
+
+themeBtn.addEventListener('click', e => {
+  e.stopPropagation();
+  const open = themePanel.classList.toggle('open');
+  themeBtn.classList.toggle('open', open);
+});
+
+document.addEventListener('click', e => {
+  if (!themePanel.contains(e.target) && e.target !== themeBtn) {
+    themePanel.classList.remove('open');
+    themeBtn.classList.remove('open');
+  }
+});
+
+themePanel.addEventListener('click', e => {
+  const swatch = e.target.closest('.theme-swatch');
+  if (!swatch) return;
+  applyTheme(swatch.dataset.theme);
+  themePanel.classList.remove('open');
+  themeBtn.classList.remove('open');
+  markDirty();
+});
+
 // ── SUBCLASS PICKER ───────────────────────────────────────
 document.addEventListener('click', e => {
   const btn = e.target.closest('.subclass-btn');
@@ -2739,7 +2925,10 @@ document.addEventListener('click', e => {
   const input = document.querySelector(`input[name="${inputName}"]`);
   if (!input) return;
   // Toggle off if clicking the already-selected subclass
-  input.value = input.value === subclass ? '' : subclass;
+  const newVal = input.value === subclass ? '' : subclass;
+  input.value = newVal;
+  // Auto-apply matching theme; clear to default if deselected
+  applyTheme(newVal || 'default');
   updateLevelFeatures();
   markDirty();
 });
@@ -2817,6 +3006,7 @@ function collectData() {
       data[el.name] = el.value;
     }
   });
+  data._theme = currentTheme;
   return data;
 }
 
@@ -2829,6 +3019,8 @@ function applyData(data) {
       el.value = data[el.name];
     }
   });
+  // Restore theme
+  applyTheme(data._theme || 'default');
   // Sync the display name
   nameDisplay.textContent = data['charname'] || 'Character Name';
   // Sync derived state
