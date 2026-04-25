@@ -21,6 +21,9 @@
   --text-faint: #3d4350;
   --danger: #e05c5c;
   --warning: #d4944a;
+  --ultra: #8855dd;
+  --ultra-glow: rgba(136,85,221,0.3);
+  --ultra-faint: rgba(136,85,221,0.08);
   --mono: 'Share Tech Mono', monospace;
   --cond: 'Barlow Condensed', sans-serif;
   --body: 'Barlow', sans-serif;
@@ -489,6 +492,117 @@ input[type="checkbox"]:checked {
   color: var(--text);
   text-align: center;
   border-bottom: 1px solid var(--border);
+}
+
+/* ── BONUS / COMPUTED FIELDS ── */
+.bonus-input {
+  width: 26px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  text-align: center;
+  border-bottom: 1px dashed var(--border-bright);
+  background: transparent;
+  outline: none;
+}
+.bonus-input::placeholder { color: var(--text-faint); }
+.bonus-input:focus { color: var(--text); border-bottom-color: var(--accent-dim); }
+.big-stat .bonus-input { width: 40px; font-size: 14px; border-bottom: 1px dashed var(--border-bright); }
+
+/* ── ATTRIBUTE SCORE BREAKDOWN ── */
+.score-breakdown {
+  display: flex;
+  gap: 3px;
+  justify-content: center;
+  margin-top: 5px;
+}
+.score-breakdown-labels {
+  display: flex;
+  gap: 3px;
+  justify-content: center;
+  margin: 1px 0 3px;
+}
+.score-breakdown-labels span {
+  text-align: center;
+  font-size: 7px;
+  color: var(--text-faint);
+  font-family: var(--mono);
+  letter-spacing: 0.04em;
+}
+.score-breakdown-labels span:first-child { width: 28px; }
+.score-breakdown-labels span:not(:first-child) { width: 22px; }
+.roll-input {
+  width: 28px;
+  font-family: var(--mono);
+  font-size: 12px;
+  text-align: center;
+  color: var(--text);
+  border-bottom: 1px solid var(--border-bright);
+  background: transparent;
+  outline: none;
+}
+.adj-input {
+  width: 22px;
+  font-family: var(--mono);
+  font-size: 11px;
+  text-align: center;
+  color: var(--text-dim);
+  border-bottom: 1px solid var(--border);
+  background: transparent;
+  outline: none;
+}
+.roll-input:focus, .adj-input:focus { border-bottom-color: var(--accent-dim); }
+.roll-input::placeholder, .adj-input::placeholder { color: var(--text-faint); }
+.ultra-input {
+  display: block;
+  width: 36px;
+  margin: 4px auto 0;
+  font-family: var(--mono);
+  font-size: 12px;
+  text-align: center;
+  color: var(--ultra);
+  border: 1px solid var(--ultra);
+  border-radius: var(--radius);
+  background: transparent;
+  outline: none;
+  padding: 1px 0;
+}
+.ultra-input::placeholder { color: rgba(136,85,221,0.35); }
+.ultra-input:focus { box-shadow: 0 0 5px var(--ultra-glow); }
+.ultra-toggle-row {
+  display: flex;
+  justify-content: center;
+  padding: 6px 0 2px;
+}
+.ultra-toggle-btn {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+  border: 1px solid var(--border-bright);
+  border-radius: var(--radius);
+  background: var(--bg3);
+  padding: 4px 12px;
+  cursor: pointer;
+}
+.ultra-toggle-btn:hover { border-color: var(--ultra); color: var(--ultra); }
+.ultra-toggle-btn.ultra-active {
+  border-color: var(--ultra);
+  color: var(--ultra);
+  background: var(--ultra-faint);
+  box-shadow: 0 0 8px var(--ultra-glow);
+}
+.attr-item .score[readonly] { cursor: default; }
+[data-ultra="true"] .attr-item .score { color: var(--ultra); }
+[data-ultra="true"] .ultra-input { box-shadow: 0 0 7px var(--ultra-glow); border-color: var(--ultra); }
+[data-ultra="true"] .roll-input { opacity: 0.3; }
+
+.attr-item .mod[readonly],
+.list-card ul li input[type="text"][readonly],
+.inline-stat input[type="text"][readonly],
+.big-stat input[type="text"][readonly] {
+  color: var(--accent);
+  cursor: default;
 }
 
 /* ── COMBAT SECTION ── */
@@ -1379,34 +1493,80 @@ input[type="number"]:focus { color: #fff; }
     <div class="attr-grid">
       <div class="attr-item">
         <label>Strength</label>
-        <input class="score" type="text" name="strval" placeholder="10">
+        <input class="score" type="text" name="strval" placeholder="—">
         <input class="mod" type="text" name="strmod" placeholder="+0">
+        <div class="score-breakdown">
+          <input type="text" name="str-roll" class="roll-input" placeholder="—">
+          <input type="text" name="str-racial" class="adj-input" placeholder="0">
+          <input type="text" name="str-misc" class="adj-input" placeholder="0">
+        </div>
+        <div class="score-breakdown-labels"><span>roll</span><span>race</span><span>misc</span></div>
+        <input type="text" name="str-ultra" class="ultra-input" placeholder="—">
       </div>
       <div class="attr-item">
         <label>Dexterity</label>
-        <input class="score" type="text" name="dexval" placeholder="10">
+        <input class="score" type="text" name="dexval" placeholder="—">
         <input class="mod" type="text" name="dexmod" placeholder="+0">
+        <div class="score-breakdown">
+          <input type="text" name="dex-roll" class="roll-input" placeholder="—">
+          <input type="text" name="dex-racial" class="adj-input" placeholder="0">
+          <input type="text" name="dex-misc" class="adj-input" placeholder="0">
+        </div>
+        <div class="score-breakdown-labels"><span>roll</span><span>race</span><span>misc</span></div>
+        <input type="text" name="dex-ultra" class="ultra-input" placeholder="—">
       </div>
       <div class="attr-item">
         <label>Constitution</label>
-        <input class="score" type="text" name="conval" placeholder="10">
+        <input class="score" type="text" name="conval" placeholder="—">
         <input class="mod" type="text" name="conmod" placeholder="+0">
+        <div class="score-breakdown">
+          <input type="text" name="con-roll" class="roll-input" placeholder="—">
+          <input type="text" name="con-racial" class="adj-input" placeholder="0">
+          <input type="text" name="con-misc" class="adj-input" placeholder="0">
+        </div>
+        <div class="score-breakdown-labels"><span>roll</span><span>race</span><span>misc</span></div>
+        <input type="text" name="con-ultra" class="ultra-input" placeholder="—">
       </div>
       <div class="attr-item">
         <label>Wisdom</label>
-        <input class="score" type="text" name="wisval" placeholder="10">
+        <input class="score" type="text" name="wisval" placeholder="—">
         <input class="mod" type="text" name="wismod" placeholder="+0">
+        <div class="score-breakdown">
+          <input type="text" name="wis-roll" class="roll-input" placeholder="—">
+          <input type="text" name="wis-racial" class="adj-input" placeholder="0">
+          <input type="text" name="wis-misc" class="adj-input" placeholder="0">
+        </div>
+        <div class="score-breakdown-labels"><span>roll</span><span>race</span><span>misc</span></div>
+        <input type="text" name="wis-ultra" class="ultra-input" placeholder="—">
       </div>
       <div class="attr-item">
         <label>Intelligence</label>
-        <input class="score" type="text" name="intval" placeholder="10">
+        <input class="score" type="text" name="intval" placeholder="—">
         <input class="mod" type="text" name="intmod" placeholder="+0">
+        <div class="score-breakdown">
+          <input type="text" name="int-roll" class="roll-input" placeholder="—">
+          <input type="text" name="int-racial" class="adj-input" placeholder="0">
+          <input type="text" name="int-misc" class="adj-input" placeholder="0">
+        </div>
+        <div class="score-breakdown-labels"><span>roll</span><span>race</span><span>misc</span></div>
+        <input type="text" name="int-ultra" class="ultra-input" placeholder="—">
       </div>
       <div class="attr-item">
         <label>Charisma</label>
-        <input class="score" type="text" name="chaval" placeholder="10">
+        <input class="score" type="text" name="chaval" placeholder="—">
         <input class="mod" type="text" name="chamod" placeholder="+0">
+        <div class="score-breakdown">
+          <input type="text" name="cha-roll" class="roll-input" placeholder="—">
+          <input type="text" name="cha-racial" class="adj-input" placeholder="0">
+          <input type="text" name="cha-misc" class="adj-input" placeholder="0">
+        </div>
+        <div class="score-breakdown-labels"><span>roll</span><span>race</span><span>misc</span></div>
+        <input type="text" name="cha-ultra" class="ultra-input" placeholder="—">
       </div>
+    </div>
+    <div class="ultra-toggle-row">
+      <button id="ultraToggle" type="button" class="ultra-toggle-btn">⚡ Ultra Mode: OFF</button>
+      <input type="hidden" name="ultramode" value="false">
     </div>
     <div class="card-title">Attributes</div>
   </div>
@@ -3067,6 +3227,114 @@ nameInput.addEventListener('input', () => {
   markDirty();
 });
 
+// ── AUTO-CALCULATED STATS ────────────────────────────────
+const SKILL_ABILITY = {
+  athletics:'str', deception:'cha', engineering:'int', hacking:'int',
+  insight:'wis', intimidation:'cha', investigation:'int', medicine:'wis',
+  perception:'wis', persuasion:'cha', piloting:'dex', stealth:'dex', survival:'wis',
+};
+
+function recalcDerived() {
+  const fmt = n => n >= 0 ? '+' + n : String(n);
+  const getBonus = name => parseInt(document.querySelector(`[name="${name}-bonus"]`)?.value) || 0;
+  const pb = parseInt(document.querySelector('[name="profbonus"]')?.value) || 2;
+  const abilities = ['str','dex','con','wis','int','cha'];
+  const ultraActive = document.querySelector('[name="ultramode"]')?.value === 'true';
+  const mods = {};
+
+  for (const ab of abilities) {
+    const rollStr = document.querySelector(`[name="${ab}-roll"]`)?.value?.trim();
+    const racial  = parseInt(document.querySelector(`[name="${ab}-racial"]`)?.value) || 0;
+    const misc    = parseInt(document.querySelector(`[name="${ab}-misc"]`)?.value)   || 0;
+    const ultraStr = document.querySelector(`[name="${ab}-ultra"]`)?.value?.trim();
+
+    let score;
+    if (rollStr) {
+      const roll  = parseInt(rollStr) || 0;
+      const ultra = ultraStr ? (parseInt(ultraStr) || 0) : roll;
+      score = (ultraActive ? ultra : roll) + racial + misc;
+    } else {
+      // Backward compat: no breakdown entered yet — read strval directly
+      score = parseInt(document.querySelector(`[name="${ab}val"]`)?.value) || 10;
+    }
+
+    mods[ab] = Math.floor((score - 10) / 2);
+    const valEl = document.querySelector(`[name="${ab}val"]`);
+    if (valEl) valEl.value = score;
+    const modEl = document.querySelector(`[name="${ab}mod"]`);
+    if (modEl) modEl.value = fmt(mods[ab]);
+  }
+
+  for (const ab of abilities) {
+    const prof = document.querySelector(`[name="${ab}-save-prof"]`)?.checked;
+    const el = document.querySelector(`[name="${ab}-save"]`);
+    if (el) el.value = fmt(mods[ab] + (prof ? pb : 0) + getBonus(`${ab}-save`));
+  }
+  for (const [skill, ab] of Object.entries(SKILL_ABILITY)) {
+    const prof = document.querySelector(`[name="${skill}-prof"]`)?.checked;
+    const el = document.querySelector(`[name="${skill}"]`);
+    if (el) el.value = fmt(mods[ab] + (prof ? pb : 0) + getBonus(skill));
+  }
+  const initEl = document.querySelector('[name="initiative"]');
+  if (initEl) initEl.value = fmt(mods.dex + getBonus('initiative'));
+  const percProf = document.querySelector('[name="perception-prof"]')?.checked;
+  const ppEl = document.querySelector('[name="passiveperc"]');
+  if (ppEl) ppEl.value = String(10 + mods.wis + (percProf ? pb : 0) + getBonus('passiveperc'));
+}
+
+function syncUltraToggle() {
+  const active = document.querySelector('[name="ultramode"]')?.value === 'true';
+  const btn = document.getElementById('ultraToggle');
+  if (btn) {
+    btn.textContent = active ? '⚡ Ultra Mode: ON' : '⚡ Ultra Mode: OFF';
+    btn.classList.toggle('ultra-active', active);
+  }
+  document.querySelector('.attr-grid')?.setAttribute('data-ultra', String(active));
+}
+
+document.getElementById('ultraToggle')?.addEventListener('click', () => {
+  const el = document.querySelector('[name="ultramode"]');
+  el.value = el.value === 'true' ? 'false' : 'true';
+  syncUltraToggle();
+  recalcDerived();
+  markDirty();
+});
+
+(function setupDerivedFields() {
+  const abilities = ['str','dex','con','wis','int','cha'];
+  const modsOnly = abilities.map(ab => `${ab}mod`);
+  const scoreVals = abilities.map(ab => `${ab}val`);
+  const withBonus = [
+    'str-save','dex-save','con-save','wis-save','int-save','cha-save',
+    ...Object.keys(SKILL_ABILITY),
+    'initiative','passiveperc',
+  ];
+
+  [...scoreVals, ...modsOnly, ...withBonus].forEach(name => {
+    const el = document.querySelector(`[name="${name}"]`);
+    if (el) el.setAttribute('readonly', '');
+  });
+
+  withBonus.forEach(name => {
+    const el = document.querySelector(`[name="${name}"]`);
+    if (!el) return;
+    const b = document.createElement('input');
+    b.type = 'text';
+    b.name = name + '-bonus';
+    b.className = 'bonus-input';
+    b.placeholder = '0';
+    b.addEventListener('input', recalcDerived);
+    el.insertAdjacentElement('afterend', b);
+  });
+
+  // Score breakdown inputs trigger recalc; strval/dexval etc are now readonly
+  abilities.flatMap(ab => [`${ab}-roll`,`${ab}-racial`,`${ab}-misc`,`${ab}-ultra`])
+    .concat(['profbonus'])
+    .forEach(name => document.querySelector(`[name="${name}"]`)?.addEventListener('input', recalcDerived));
+
+  document.querySelectorAll('[name$="-prof"]').forEach(el => el.addEventListener('change', recalcDerived));
+})();
+
 // ── FIELDS ───────────────────────────────────────────────
 // Collect every named input + textarea + checkbox
 function getFields() {
@@ -3148,6 +3416,8 @@ function applyData(data) {
   // Sync derived state
   syncClassTabs();
   updateLevelFeatures();
+  recalcDerived();
+  syncUltraToggle();
 }
 
 // ── COMPRESSION ──────────────────────────────────────────
@@ -3299,6 +3569,8 @@ async function loadFromHash() {
 }
 
 loadFromHash();
+recalcDerived();
+syncUltraToggle();
 </script>
 </body>
 </html>
