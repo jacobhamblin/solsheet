@@ -391,7 +391,7 @@ input[type="checkbox"]:checked {
   font-family: var(--cond);
   font-size: 30px;
   font-weight: 600;
-  color: #e8eaf0;
+  color: var(--text);
   border-bottom: 1px solid var(--accent-dim);
   padding-bottom: 3px;
 }
@@ -633,7 +633,7 @@ input[type="checkbox"]:checked {
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
   align-items: center;
   padding: 8px 4px 10px;
   text-align: center;
@@ -678,6 +678,7 @@ input[type="checkbox"]:checked {
   background: transparent;
   border-top: none; border-left: none; border-right: none;
 }
+.hp-max-bar input[readonly] { color: var(--accent); border-bottom-color: transparent; cursor: default; }
 .hp-main {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -752,6 +753,7 @@ input[type="checkbox"]:checked {
   color: var(--text-dim);
 }
 .ac-stat .adj-input:focus { border-bottom-color: var(--accent-dim); color: var(--text); }
+.ac-stat .adj-input[readonly] { color: var(--accent); border-bottom-color: transparent; cursor: default; }
 
 .hd-saves-row {
   display: grid;
@@ -1706,14 +1708,14 @@ input[type="number"]:focus { color: #fff; }
   <div class="sec-heading">Defense</div>
   <div class="big-stats-row">
     <div class="big-stat ac-stat">
-      <div class="score-breakdown-labels"><span>base</span><span>armor</span><span>misc</span></div>
+      <input type="text" name="ac" placeholder="10">
+      <label>Armor Class</label>
       <div class="score-breakdown">
         <input type="text" name="ac-base" class="adj-input" placeholder="—">
         <input type="text" name="ac-armor" class="adj-input" placeholder="0">
         <input type="text" name="ac-misc" class="adj-input" placeholder="0">
       </div>
-      <label>Armor Class</label>
-      <input type="text" name="ac" placeholder="10">
+      <div class="score-breakdown-labels"><span>base</span><span>armor</span><span>misc</span></div>
     </div>
     <div class="big-stat">
       <input type="text" name="initiative" placeholder="+0">
@@ -3361,6 +3363,7 @@ function recalcDerived() {
   const percProf = document.querySelector('[name="perception-prof"]')?.checked;
   const ppEl = document.querySelector('[name="passiveperc"]');
   if (ppEl) ppEl.value = String(10 + mods.wis + (percProf ? pb : 0) + getBonus('passiveperc'));
+  recalcAC();
 }
 
 function syncUltraToggle() {
@@ -3382,9 +3385,10 @@ document.getElementById('ultraToggle')?.addEventListener('click', () => {
 });
 
 function recalcAC() {
-  const baseStr = document.querySelector('[name="ac-base"]')?.value?.trim();
-  if (!baseStr) return;
-  const base  = parseInt(baseStr) || 0;
+  const dexMod = parseInt(document.querySelector('[name="dexmod"]')?.value) || 0;
+  const base = 10 + dexMod;
+  const baseEl = document.querySelector('[name="ac-base"]');
+  if (baseEl) baseEl.value = String(base);
   const armor = parseInt(document.querySelector('[name="ac-armor"]')?.value) || 0;
   const misc  = parseInt(document.querySelector('[name="ac-misc"]')?.value)  || 0;
   const el = document.querySelector('[name="ac"]');
@@ -3445,7 +3449,7 @@ function recalcMaxHP() {
     'initiative','passiveperc',
   ];
 
-  [...scoreVals, ...modsOnly, ...withBonus].forEach(name => {
+  [...scoreVals, ...modsOnly, ...withBonus, 'ac-base', 'maxhp'].forEach(name => {
     const el = document.querySelector(`[name="${name}"]`);
     if (el) el.setAttribute('readonly', '');
   });
@@ -3469,7 +3473,7 @@ function recalcMaxHP() {
 
   document.querySelectorAll('[name$="-prof"]').forEach(el => el.addEventListener('change', recalcDerived));
 
-  ['ac-base','ac-armor','ac-misc'].forEach(name =>
+  ['ac-armor','ac-misc'].forEach(name =>
     document.querySelector(`[name="${name}"]`)?.addEventListener('input', recalcAC)
   );
   document.querySelector('[name="hp-misc"]')?.addEventListener('input', recalcMaxHP);
