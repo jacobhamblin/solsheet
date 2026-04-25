@@ -33,6 +33,10 @@ Skills (value / prof checkbox): `athletics` / `athletics-prof`, `deception` / `d
 
 Skill → ability mapping: Athletics→STR; Piloting/Stealth→DEX; Engineering/Hacking/Investigation→INT; Insight/Medicine/Perception/Survival→WIS; Deception/Intimidation/Persuasion→CHA.
 
+**AC breakdown** (editable): `ac-base`, `ac-armor`, `ac-misc`. `ac` is updated by `recalcAC()` when `ac-base` is non-empty; otherwise `ac` stays as-is (backward compat).
+
+**HP level-up breakdown** (dynamic): `hp-<classname>-<level>` (e.g. `hp-kineticist-1`) plus static `hp-misc`. `rebuildHPEntries()` generates one labeled input per active class level; `recalcMaxHP()` sums them all. Only writes `maxhp` if at least one entry is non-empty (backward compat for old JSONs). These dynamic inputs ARE collected by `collectData()` since it queries the live DOM. In `applyData()`, `rebuildHPEntries()` runs first to create the inputs, then a second pass re-applies `hp-*` values from the JSON.
+
 ### Auto-calculation
 
 `recalcDerived()` recomputes all ability scores, modifiers, saving throws, skills, initiative, and passive perception from the breakdown inputs and proficiency checkboxes. It fires on any breakdown input change, any prof checkbox change, and after `applyData()`. Saves/skills/initiative/passive perception are **readonly** in the DOM.

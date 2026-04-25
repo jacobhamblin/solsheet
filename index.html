@@ -685,6 +685,58 @@ input[type="checkbox"]:checked {
   border: none; background: transparent; outline: none;
 }
 
+.hp-levelup-section {
+  border-bottom: 1px solid var(--border);
+}
+.hp-level-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 3px 12px;
+}
+.hp-levelup-section .hp-level-row:first-child { padding-top: 6px; }
+.hp-levelup-section .hp-level-row:last-child { padding-bottom: 6px; }
+.hp-misc-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 3px 12px 6px;
+  border-bottom: 1px solid var(--border);
+}
+.hp-level-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text-dim);
+  text-transform: capitalize;
+  letter-spacing: 0.05em;
+}
+.hp-level-input {
+  width: 44px;
+  font-family: var(--mono);
+  font-size: 13px;
+  text-align: right;
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
+  background: transparent;
+  outline: none;
+  border-top: none; border-left: none; border-right: none;
+}
+.hp-level-input:focus { border-bottom-color: var(--accent-dim); }
+.ac-stat .score-breakdown-labels span { width: 22px; }
+.ac-stat .adj-input {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: normal;
+  width: 22px;
+  border: none;
+  border-bottom: 1px dashed var(--border);
+  background: transparent;
+  outline: none;
+  text-align: center;
+  color: var(--text-dim);
+}
+.ac-stat .adj-input:focus { border-bottom-color: var(--accent-dim); color: var(--text); }
+
 .hd-saves-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1637,9 +1689,15 @@ input[type="number"]:focus { color: #fff; }
 
   <div class="sec-heading">Defense</div>
   <div class="big-stats-row">
-    <div class="big-stat">
-      <input type="text" name="ac" placeholder="10">
+    <div class="big-stat ac-stat">
+      <div class="score-breakdown-labels"><span>base</span><span>armor</span><span>misc</span></div>
+      <div class="score-breakdown">
+        <input type="text" name="ac-base" class="adj-input" placeholder="—">
+        <input type="text" name="ac-armor" class="adj-input" placeholder="0">
+        <input type="text" name="ac-misc" class="adj-input" placeholder="0">
+      </div>
       <label>Armor Class</label>
+      <input type="text" name="ac" placeholder="10">
     </div>
     <div class="big-stat">
       <input type="text" name="initiative" placeholder="+0">
@@ -1656,6 +1714,11 @@ input[type="number"]:focus { color: #fff; }
     <div class="hp-max-bar">
       <label>Hit Point Maximum</label>
       <input type="text" name="maxhp" placeholder="—">
+    </div>
+    <div id="hp-levelup-entries" class="hp-levelup-section"></div>
+    <div class="hp-misc-row">
+      <span class="hp-level-label" style="color:var(--text-faint);font-size:9px;letter-spacing:0.08em;">MISC</span>
+      <input type="text" name="hp-misc" class="hp-level-input" placeholder="0">
     </div>
     <div class="hp-main">
       <div class="hp-cell">
@@ -3088,6 +3151,7 @@ document.getElementById('classPicker').addEventListener('click', e => {
   checkbox.checked = !checkbox.checked;
   syncClassTabs();
   updateLevelFeatures();
+  rebuildHPEntries();
   markDirty();
 });
 
@@ -3218,6 +3282,7 @@ document.addEventListener('click', e => {
 document.getElementById('classLevels').addEventListener('input', e => {
   if (e.target.matches('input[type="number"]')) {
     updateLevelFeatures();
+    rebuildHPEntries();
     markDirty();
   }
 });
@@ -3300,6 +3365,60 @@ document.getElementById('ultraToggle')?.addEventListener('click', () => {
   markDirty();
 });
 
+function recalcAC() {
+  const baseStr = document.querySelector('[name="ac-base"]')?.value?.trim();
+  if (!baseStr) return;
+  const base  = parseInt(baseStr) || 0;
+  const armor = parseInt(document.querySelector('[name="ac-armor"]')?.value) || 0;
+  const misc  = parseInt(document.querySelector('[name="ac-misc"]')?.value)  || 0;
+  const el = document.querySelector('[name="ac"]');
+  if (el) el.value = String(base + armor + misc);
+}
+
+function rebuildHPEntries() {
+  const container = document.getElementById('hp-levelup-entries');
+  if (!container) return;
+  const saved = {};
+  container.querySelectorAll('input[name]').forEach(el => { saved[el.name] = el.value; });
+  container.innerHTML = '';
+  CLASSES.forEach(cls => {
+    const active = document.querySelector(`[name="class-${cls}"]`)?.checked;
+    if (!active) return;
+    const level = parseInt(document.querySelector(`[name="class-level-${cls}"]`)?.value) || 0;
+    for (let i = 1; i <= level; i++) {
+      const name = `hp-${cls}-${i}`;
+      const row = document.createElement('div');
+      row.className = 'hp-level-row';
+      const lbl = document.createElement('span');
+      lbl.className = 'hp-level-label';
+      lbl.textContent = `${cls.charAt(0).toUpperCase() + cls.slice(1)} ${i}`;
+      const inp = document.createElement('input');
+      inp.type = 'text';
+      inp.name = name;
+      inp.className = 'hp-level-input';
+      inp.placeholder = '—';
+      inp.value = saved[name] ?? '';
+      inp.addEventListener('input', recalcMaxHP);
+      inp.addEventListener('input', markDirty);
+      row.append(lbl, inp);
+      container.appendChild(row);
+    }
+  });
+  recalcMaxHP();
+}
+
+function recalcMaxHP() {
+  const container = document.getElementById('hp-levelup-entries');
+  const entries = container ? [...container.querySelectorAll('input[name]')] : [];
+  if (entries.length === 0) return;
+  const anyFilled = entries.some(el => el.value.trim() !== '');
+  if (!anyFilled) return;
+  let total = entries.reduce((sum, el) => sum + (parseInt(el.value) || 0), 0);
+  total += parseInt(document.querySelector('[name="hp-misc"]')?.value) || 0;
+  const el = document.querySelector('[name="maxhp"]');
+  if (el) el.value = String(total);
+}
+
 (function setupDerivedFields() {
   const abilities = ['str','dex','con','wis','int','cha'];
   const modsOnly = abilities.map(ab => `${ab}mod`);
@@ -3333,6 +3452,11 @@ document.getElementById('ultraToggle')?.addEventListener('click', () => {
     .forEach(name => document.querySelector(`[name="${name}"]`)?.addEventListener('input', recalcDerived));
 
   document.querySelectorAll('[name$="-prof"]').forEach(el => el.addEventListener('change', recalcDerived));
+
+  ['ac-base','ac-armor','ac-misc'].forEach(name =>
+    document.querySelector(`[name="${name}"]`)?.addEventListener('input', recalcAC)
+  );
+  document.querySelector('[name="hp-misc"]')?.addEventListener('input', recalcMaxHP);
 })();
 
 // ── FIELDS ───────────────────────────────────────────────
@@ -3416,7 +3540,17 @@ function applyData(data) {
   // Sync derived state
   syncClassTabs();
   updateLevelFeatures();
+  // Build HP level entries now that class state is set, then apply their saved values
+  rebuildHPEntries();
+  Object.keys(data).forEach(key => {
+    if (/^hp-[a-z]+-\d+$/.test(key)) {
+      const el = document.querySelector(`[name="${key}"]`);
+      if (el) el.value = data[key];
+    }
+  });
   recalcDerived();
+  recalcAC();
+  recalcMaxHP();
   syncUltraToggle();
 }
 
@@ -3569,7 +3703,10 @@ async function loadFromHash() {
 }
 
 loadFromHash();
+rebuildHPEntries();
 recalcDerived();
+recalcAC();
+recalcMaxHP();
 syncUltraToggle();
 </script>
 </body>
